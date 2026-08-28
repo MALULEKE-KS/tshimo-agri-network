@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Milestone 1 — Client Design Review</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+    color: #1a2233;
+    background: #ffffff;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  :root{
+    --navy: #14264a;
+    --navy-deep: #0c1830;
+    --gold: #c9992c;
+    --admin: #2f5fa8;
+    --admin-bg: #eaf0fa;
+    --sales: #6c4fa1;
+    --sales-bg: #f1ecf8;
+    --warehouse: #b8791b;
+    --warehouse-bg: #fbf1de;
+    --servers: #1c8a72;
+    --servers-bg: #e6f5f1;
+    --infra: #4a5568;
+    --infra-bg: #eef0f3;
+    --ink: #1a2233;
+    --muted: #5b6472;
+    --line: #dbe0e8;
+    --paper-soft: #f6f7fa;
+  }
+
+  svg { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.15em; }
+  svg.icon { width: 1em; height: 1em; }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 16mm 16mm 14mm 16mm;
+    position: relative;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* ---------- header bar (matches diagram figures) ---------- */
+  .bar {
+    background: linear-gradient(90deg, var(--navy-deep), var(--navy));
+    color: #fff;
+    border-radius: 8px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 4px solid var(--gold);
+    margin-bottom: 20px;
+  }
+  .bar h1 { font-size: 19px; margin: 0; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+  .bar .sub { font-size: 11.5px; opacity: .85; text-align: right; }
+  .bar .icon-wrap { display:flex; align-items:center; gap:10px; }
+  .bar .icon-wrap svg { width: 22px; height: 22px; }
+
+  .kicker { color: var(--gold); font-weight: 700; letter-spacing: .12em; font-size: 10.5px; text-transform: uppercase; }
+
+  h2.section-title { font-size: 17px; color: var(--navy); margin: 0 0 4px 0; }
+  p.section-desc { color: var(--muted); margin: 0 0 14px 0; font-size: 12.3px; }
+
+  .footer {
+    position: absolute;
+    left: 16mm; right: 16mm; bottom: 10mm;
+    display: flex; justify-content: space-between;
+    font-size: 9.5px; color: var(--muted);
+    border-top: 1px solid var(--line);
+    padding-top: 6px;
+  }
+
+  /* ---------- cover page ---------- */
+  .cover { display: flex; flex-direction: column; height: 265mm; }
+  .cover-badge {
+    align-self: flex-start;
+    background: var(--navy);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .cover h1 {
+    font-size: 34px;
+    color: var(--navy);
+    margin: 22px 0 6px 0;
+    line-height: 1.15;
+  }
+  .cover h2 {
+    font-size: 17px;
+    color: var(--gold);
+    font-weight: 600;
+    margin: 0 0 26px 0;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .cover-rule { height: 3px; width: 90px; background: var(--gold); margin: 0 0 26px 0; }
+
+  .id-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: auto;
+  }
+  .id-card {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--navy);
+    border-radius: 6px;
+    padding: 11px 14px;
+    background: var(--paper-soft);
+  }
+  .id-card .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  .id-card .v { font-size: 14px; color: var(--ink); font-weight: 700; margin-top: 2px; }
+
+  .cover-strip {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+  }
+  .chip {
+    display:flex; align-items:center; gap:6px;
+    background: #fff; border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 14px; font-size: 11px; color: var(--navy); font-weight: 600;
+  }
+  .chip svg { width: 14px; height: 14px; }
+
+  .cover-footer-block {
+    margin-top: 24px;
+    border-top: 2px solid var(--navy);
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+
+  /* ---------- TOC ---------- */
+  .toc-list { list-style: none; margin: 0; padding: 0; }
+  .toc-list li {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .toc-num {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; flex: none;
+  }
+  .toc-list .t-title { font-weight: 700; color: var(--ink); font-size: 13.5px; }
+  .toc-list .t-desc { color: var(--muted); font-size: 11px; }
+  .toc-list .t-main { flex: 1; }
+  .toc-list svg { color: var(--gold); width: 18px; height: 18px; flex: none; }
+
+  .philosophy {
+    margin-top: 22px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 10px;
+    padding: 22px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .philosophy::before {
+    content: "";
+    position: absolute; top: -30px; right: -30px;
+    width: 140px; height: 140px; border-radius: 50%;
+    background: rgba(201,153,44,0.18);
+  }
+  .philosophy .kicker { color: var(--gold); }
+  .philosophy p { font-size: 13.5px; line-height: 1.7; margin: 8px 0 0 0; max-width: 92%; }
+
+  /* ---------- generic cards / tables ---------- */
+  table.pro {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px 0;
+    font-size: 11.6px;
+  }
+  table.pro th {
+    text-align: left;
+    background: var(--navy);
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  table.pro td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.pro tr:nth-child(even) td { background: var(--paper-soft); }
+  table.pro td.mono { font-family: "Consolas", "Courier New", monospace; font-weight: 600; }
+
+  .dept-tag { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+  .dept-admin { background: var(--admin-bg); color: var(--admin); }
+  .dept-sales { background: var(--sales-bg); color: var(--sales); }
+  .dept-wh { background: var(--warehouse-bg); color: var(--warehouse); }
+  .dept-srv { background: var(--servers-bg); color: var(--servers); }
+  .dept-infra { background: var(--infra-bg); color: var(--infra); }
+
+  .req-list { list-style: none; margin: 0 0 18px 0; padding: 0; display: grid; gap: 8px; }
+  .req-list li {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--paper-soft); border: 1px solid var(--line); border-radius: 7px;
+    padding: 9px 12px; font-size: 12px;
+  }
+  .req-list svg { color: var(--servers); width: 16px; height: 16px; flex: none; margin-top: 1px; }
+
+  .fig-frame {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px;
+    background: var(--paper-soft);
+    margin: 6px 0 6px 0;
+    text-align: center;
+  }
+  .fig-frame img { max-width: 100%; max-height: 88mm; display: inline-block; border-radius: 4px; }
+  .fig-caption {
+    font-size: 10.5px; color: var(--muted); text-align: center; margin: 6px 0 12px 0; font-style: italic;
+  }
+
+  .device-icon {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--admin-bg); color: var(--admin); margin-right: 6px;
+  }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .num-card {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 9px;
+    background: #fff;
+  }
+  .num-card .n {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--gold); color: #fff;
+    font-weight: 700; font-size: 11.5px; display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .num-card .h { font-weight: 700; color: var(--navy); font-size: 12.3px; margin-bottom: 2px; }
+  .num-card .b { font-size: 11.5px; color: var(--muted); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin: 12px 0 20px 0; }
+
+  .satisfy-card {
+    border-radius: 9px; padding: 14px 16px; color: #fff;
+  }
+  .satisfy-card.branch { background: linear-gradient(135deg, var(--navy), #223a68); }
+  .satisfy-card.cr1 { background: linear-gradient(135deg, #8a5a10, var(--warehouse)); }
+  .satisfy-card h3 { margin: 6px 0 4px 0; font-size: 13.5px; }
+  .satisfy-card p { margin: 0; font-size: 11.5px; opacity: .92; line-height: 1.55; }
+  .satisfy-card .tag { font-size: 9.5px; text-transform: uppercase; letter-spacing: .08em; opacity: .85; }
+
+  .tree {
+    background: var(--navy-deep);
+    color: #dfe6f5;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: "Consolas","Courier New",monospace;
+    font-size: 11.3px;
+    line-height: 1.75;
+    margin: 8px 0 18px 0;
+  }
+  .tree .d { color: #7fb2ff; }
+  .tree .f { color: #f0c766; }
+  .tree .c { color: #8fd9b6; }
+
+  .commit-list { list-style: none; margin: 0; padding: 0; counter-reset: c; }
+  .commit-list li {
+    counter-increment: c;
+    display: flex; gap: 10px; align-items: center;
+    padding: 8px 0; border-bottom: 1px dashed var(--line);
+    font-size: 12px;
+  }
+  .commit-list li::before {
+    content: counter(c);
+    width: 20px; height: 20px; border-radius: 50%; background: var(--navy); color:#fff;
+    font-size: 10.5px; font-weight: 700; display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .commit-list code { background: var(--paper-soft); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+  .sign-box { border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; margin-top: 18px; }
+  .sign-line { border-bottom: 1px solid var(--ink); width: 60%; margin: 26px 0 6px 0; }
+  .milestone-track { display: grid; gap: 10px; margin-top: 10px; }
+  .m-row { display: flex; align-items: center; gap: 12px; }
+  .m-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .m-done { background: var(--servers); }
+  .m-pending { background: var(--line); border: 2px solid var(--muted); }
+  .m-row .label { font-weight: 700; font-size: 12px; color: var(--ink); width: 190px; }
+  .m-row .date { font-size: 11px; color: var(--muted); width: 100px; }
+  .m-row .status { font-size: 10.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+  .st-progress { background: #fdf1d8; color: var(--gold); }
+  .st-pending { background: var(--infra-bg); color: var(--infra); }
+</style>
+</head>
+<body>
+
+<!-- ============ ICON SPRITE ============ -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+  <symbol id="i-router" viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="6" rx="1.5"/><circle cx="8" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><path d="M6 14v-3a6 6 0 0 1 12 0v3"/></symbol>
+  <symbol id="i-switch" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="1.5"/><circle cx="7" cy="12" r=".8"/><circle cx="10.3" cy="12" r=".8"/><circle cx="13.6" cy="12" r=".8"/><circle cx="16.9" cy="12" r=".8"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="6" rx="1.2"/><rect x="4" y="15" width="16" height="6" rx="1.2"/><circle cx="8" cy="6" r=".8"/><circle cx="8" cy="18" r=".8"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-git" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="9" r="2.2"/><path d="M6 8v8M6 12c0-3.3 2.7-3 6-3h1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15 14.2c2.3.4 4 2.4 4 5.8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="18" r="2.3"/><path d="M8 6h6a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H8"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h13l-3 4 3 4H5"/></symbol>
+</defs>
+</svg>
+
+<!-- ============ PAGE 1 — COVER ============ -->
+<div class="page">
+  <div class="cover">
+    <div class="cover-badge">CMPG 325 &middot; Computer Networks &middot; NWU Mahikeng</div>
+    <h1>Client Design Review</h1>
+    <h2>Milestone 1 &nbsp;&middot;&nbsp; Tshimo Agri Supplies Network Design</h2>
+    <div class="cover-rule"></div>
+
+    <div class="cover-strip">
+      <div class="chip"><svg class="icon"><use href="#i-building"/></svg> Potchefstroom, Agriculture</div>
+      <div class="chip"><svg class="icon"><use href="#i-grid"/></svg> 10.23.0.0/16</div>
+      <div class="chip"><svg class="icon"><use href="#i-shield"/></svg> Fault Isolation — Advanced</div>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-card"><div class="k">Student</div><div class="v">Maluleke, Kurhula Success</div></div>
+      <div class="id-card"><div class="k">Student Number</div><div class="v">48277444</div></div>
+      <div class="id-card"><div class="k">Project ID</div><div class="v">CMPG325-2026-042</div></div>
+      <div class="id-card"><div class="k">Client ID</div><div class="v">CLI-042</div></div>
+      <div class="id-card"><div class="k">Assigned Client</div><div class="v">Tshimo Agri Supplies</div></div>
+      <div class="id-card"><div class="k">Assigned Challenge</div><div class="v">Network Troubleshooting</div></div>
+    </div>
+
+    <div class="cover-footer-block">
+      <span>Milestone 1 — Client Design Review — due 28 Aug 2026</span>
+      <span>Document prepared as portfolio &amp; submission package</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 — TOC + PHILOSOPHY ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-list"/></svg><h1>Contents</h1></div>
+    <div class="sub">CMPG325-2026-042<br>Tshimo Agri Supplies</div>
+  </div>
+
+  <ul class="toc-list">
+    <li><div class="toc-num">1</div><div class="t-main"><div class="t-title">Client Requirements</div><div class="t-desc">Stated brief requirements and the interpreted department structure</div></div><svg><use href="#i-list"/></svg></li>
+    <li><div class="toc-num">2</div><div class="t-main"><div class="t-title">Physical Topology</div><div class="t-desc">Devices, roles, and cabling for the Potchefstroom HQ</div></div><svg><use href="#i-router"/></svg></li>
+    <li><div class="toc-num">3</div><div class="t-main"><div class="t-title">Logical Topology</div><div class="t-desc">VLANs, subnets, gateways, and the routing model</div></div><svg><use href="#i-map"/></svg></li>
+    <li><div class="toc-num">4</div><div class="t-main"><div class="t-title">IP Addressing Plan</div><div class="t-desc">The full 10.23.0.0/16 breakdown and why it satisfies both constraints</div></div><svg><use href="#i-grid"/></svg></li>
+    <li><div class="toc-num">5</div><div class="t-main"><div class="t-title">Initial GitHub Repository</div><div class="t-desc">Portfolio structure, README skeleton, and commit plan</div></div><svg><use href="#i-git"/></svg></li>
+  </ul>
+
+  <div class="philosophy">
+    <div class="kicker">Design Philosophy</div>
+    <p>Every decision in this plan follows one rule: solve the requirement by <strong>allocation</strong>, not by re-architecture. Uniform subnet sizes, a single summarisable HQ route, and untouched reserved space mean the branch-office constraint and Change Request&nbsp;1 are both already solved <em>before they happen</em>.</p>
+  </div>
+</div>
+
+<!-- ============ PAGE 3 — SECTION 1: CLIENT REQUIREMENTS ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-list"/></svg><h1>1&nbsp;&nbsp;Client Requirements</h1></div>
+    <div class="sub">Section 1 of 5</div>
+  </div>
+
+  <div class="kicker" style="color:var(--navy)">1.1&nbsp; Stated Requirements — from the project brief</div>
+  <p class="section-desc">The following requirements are given directly by the assignment brief and are not open to interpretation.</p>
+  <ul class="req-list">
+    <li><svg><use href="#i-check"/></svg><div><strong>Assigned organisation:</strong> Tshimo Agri Supplies (Potchefstroom) &middot; Industry: Agriculture</div></li>
+    <li><svg><use href="#i-check"/></svg><div><strong>Assigned addressing block:</strong> <span class="mono" style="font-family:Consolas,monospace">10.23.0.0/16</span> — must form the basis of the entire IP addressing plan</div></li>
+    <li><svg><use href="#i-check"/></svg><div>Provide appropriate connectivity and network services for the assigned scenario</div></li>
+    <li><svg><use href="#i-check"/></svg><div><strong>Design Constraint:</strong> a branch office may open within 18 months — the addressing plan must allow for it without redesign</div></li>
+    <li><svg><use href="#i-check"/></svg><div><strong>Change Request CR1:</strong> the client signs 8 additional staff in one department — capacity must be added without redesigning the network</div></li>
+    <li><svg><use href="#i-check"/></svg><div>Produce a working, testable Cisco Packet Tracer implementation and demonstrate the assigned challenge: <strong>Network Troubleshooting (fault isolation scenario)</strong></div></li>
+  </ul>
+
+  <div class="kicker" style="color:var(--navy)">1.2&nbsp; Interpreted Organisational Requirements — design assumption</div>
+  <p class="section-desc">The brief does not specify Tshimo Agri Supplies' internal department structure. The breakdown below was adopted for a small-to-medium agricultural supply business and drives the topology and addressing plan in Sections 2–4. <strong>This is a working assumption, flagged for client confirmation.</strong></p>
+
+  <table class="pro">
+    <tr><th>Department</th><th>Function</th><th>Current Staff</th></tr>
+    <tr><td><span class="dept-tag dept-admin">VLAN 10</span> Administration / Management</td><td>HR, finance, general management</td><td>8</td></tr>
+    <tr><td><span class="dept-tag dept-sales">VLAN 20</span> Sales</td><td>Customer-facing sales &amp; orders</td><td>12</td></tr>
+    <tr><td><span class="dept-tag dept-wh">VLAN 30</span> Warehouse / Logistics</td><td>Stock, dispatch, delivery — <strong>CR1 department</strong></td><td>12 (+8 via CR1 = 20)</td></tr>
+    <tr><td><span class="dept-tag dept-srv">VLAN 40</span> IT / Server Room</td><td>DHCP, DNS and File/ERP services</td><td>3 servers</td></tr>
+  </table>
+
+  <div class="num-card">
+    <div class="n">i</div>
+    <div><div class="h">Why CR1 lands on Warehouse / Logistics</div><div class="b">CR1 is applied to Warehouse/Logistics because staffing growth in an agricultural supply business most plausibly occurs in stock handling and dispatch as client order volume grows — not in Admin or Sales, which scale far more slowly relative to warehouse throughput.</div></div>
+  </div>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 4 — SECTION 2: PHYSICAL TOPOLOGY ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-router"/></svg><h1>2&nbsp;&nbsp;Physical Topology</h1></div>
+    <div class="sub">Section 2 of 5</div>
+  </div>
+
+  <p class="section-desc">A single edge router provides the WAN connection; a core switch distributes 802.1Q trunks down to one access switch per department, keeping every department electrically and logically separate while sharing a single router for inter-department routing.</p>
+
+  <div class="fig-frame"><img src="physical_topology.png" alt="Physical Topology diagram"></div>
+  <div class="fig-caption">Figure 1 — Physical Topology, Tshimo Agri Supplies HQ (Potchefstroom)</div>
+
+  <table class="pro">
+    <tr><th>Device</th><th>Role</th><th>Suggested PT Model</th><th>Key Interfaces</th></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-router"/></svg></span><strong>R1</strong></td><td>Edge router — WAN uplink, inter-VLAN routing (router-on-a-stick), NAT/PAT</td><td>Cisco 4321 / 2911</td><td class="mono">Gi0/0 (trunk to SW-CORE), Gi0/1 (WAN to ISP)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-CORE</strong></td><td>Distribution switch — trunks VLANs between R1 and access layer</td><td>Cisco 2960</td><td class="mono">Trunk ports to R1 and each access switch</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-ADM / SW-SAL / SW-WH</strong></td><td>Access switches — one per department</td><td>Cisco 2960 (24-port)</td><td class="mono">Access ports to PCs, uplink trunk to core</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-SRV</strong></td><td>Access switch — server segment</td><td>Cisco 2960</td><td class="mono">Access ports to DHCP/DNS/File servers</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-monitor"/></svg></span><strong>End devices</strong></td><td>Department PCs + 3 servers</td><td>PC-PT / Server-PT</td><td class="mono">FastEthernet to access switch</td></tr>
+  </table>
+
+  <div class="num-card">
+    <div class="n">i</div>
+    <div><div class="h">Physical headroom matches logical headroom</div><div class="b">Access switches are specified as 24-port models even where current headcount is lower (e.g. Admin at 8 PCs), so CR1-style headcount growth is absorbed at the physical layer as well as the addressing layer — see Section 4.</div></div>
+  </div>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 5 — SECTION 3: LOGICAL TOPOLOGY ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-map"/></svg><h1>3&nbsp;&nbsp;Logical Topology</h1></div>
+    <div class="sub">Section 3 of 5</div>
+  </div>
+
+  <p class="section-desc">Each department is a separate VLAN. R1 performs inter-VLAN routing using a router-on-a-stick design (one sub-interface per VLAN on Gi0/0), and provides the default route out to the ISP on Gi0/1 with NAT/PAT for internet-bound traffic. DHCP is served from a dedicated DHCP server in the Server VLAN rather than the router, reflecting realistic enterprise practice.</p>
+
+  <div class="fig-frame"><img src="logical_topology.png" alt="Logical Topology diagram"></div>
+  <div class="fig-caption">Figure 2 — Logical Topology: VLANs, subnets and default gateways</div>
+
+  <table class="pro">
+    <tr><th>VLAN</th><th>Name</th><th>Purpose</th><th>Subnet</th></tr>
+    <tr><td><span class="dept-tag dept-admin">10</span></td><td>ADMIN</td><td>Administration / Management</td><td class="mono">10.23.0.0/26</td></tr>
+    <tr><td><span class="dept-tag dept-sales">20</span></td><td>SALES</td><td>Sales</td><td class="mono">10.23.0.64/26</td></tr>
+    <tr><td><span class="dept-tag dept-wh">30</span></td><td>WAREHOUSE</td><td>Warehouse / Logistics (CR1 department)</td><td class="mono">10.23.0.128/26</td></tr>
+    <tr><td><span class="dept-tag dept-srv">40</span></td><td>SERVERS</td><td>DHCP, DNS, File/ERP servers</td><td class="mono">10.23.0.192/26</td></tr>
+    <tr><td><span class="dept-tag dept-infra">99</span></td><td>MGMT-NATIVE</td><td>Switch management / native VLAN (no user traffic)</td><td class="mono">10.23.1.16/28</td></tr>
+  </table>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 6 — SECTION 4a: ADDRESSING PLAN INTRO ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-grid"/></svg><h1>4&nbsp;&nbsp;IP Addressing Plan</h1></div>
+    <div class="sub">Section 4 of 5</div>
+  </div>
+
+  <p class="section-desc">The assigned block <strong>10.23.0.0/16</strong> is split first at the /17 level: the lower half is allocated to the Potchefstroom HQ site now, and the upper half is reserved, untouched, for the branch-office constraint. Inside HQ, the plan uses exactly two /24 networks today — one for business VLANs, one for infrastructure — chosen so the whole HQ site collapses into a single summary route upstream.</p>
+
+  <div class="kicker" style="color:var(--navy)">Why this is the smart solution, not the hard one</div>
+  <div class="num-card"><div class="n">1</div><div><div class="h">Uniform block sizing</div><div class="b">Every department VLAN is the same size (/26 = 62 hosts), so the whole plan fits in one sentence: "VLAN N lives at offset (N/10 − 1) × 64 in 10.23.0.0/24." Nothing to memorise per department.</div></div></div>
+  <div class="num-card"><div class="n">2</div><div><div class="h">One summary route</div><div class="b">10.23.0.0/24 (business) and 10.23.1.0/24 (infrastructure) are contiguous, so R1 can summarise the entire HQ site as a single 10.23.0.0/23 route upstream instead of advertising every subnet individually.</div></div></div>
+  <div class="num-card"><div class="n">3</div><div><div class="h">Separation of concerns</div><div class="b">User traffic (business VLANs) and infrastructure (WAN, management, guest) live in different /24s — a real enterprise security practice, not just a numbering trick.</div></div></div>
+  <div class="num-card"><div class="n">4</div><div><div class="h">Growth by allocation, not redesign</div><div class="b">CR1 and the branch-office constraint are both solved by handing out already-reserved space, never by re-cabling, re-VLANing, or re-IP-addressing anything already deployed.</div></div></div>
+
+  <div class="kicker" style="color:var(--navy); margin-top:14px">4.1&nbsp; Top-level split — Design Constraint (branch office)</div>
+  <table class="pro">
+    <tr><th>Allocation</th><th>Block</th><th>Status</th></tr>
+    <tr><td>HQ — Potchefstroom</td><td class="mono">10.23.0.0/17</td><td>In use — 2 of 128 possible /24s (see 4.2 / 4.3)</td></tr>
+    <tr><td>Reserved — future Branch Office</td><td class="mono">10.23.128.0/17</td><td><strong>Untouched</strong> — available on demand</td></tr>
+  </table>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 7 — SECTION 4b: TABLES + HIGHLIGHTS + SATISFACTION ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-grid"/></svg><h1>4&nbsp;&nbsp;IP Addressing Plan</h1></div>
+    <div class="sub">Section 4 of 5 (continued)</div>
+  </div>
+
+  <div class="fig-frame" style="padding:14px;"><img src="highlights_banner.png" alt="Design highlights banner"></div>
+
+  <div class="kicker" style="color:var(--navy)">4.2&nbsp; Business VLANs — 10.23.0.0/24 (uniform /26 blocks)</div>
+  <table class="pro">
+    <tr><th>Subnet (VLAN)</th><th>Network / CIDR</th><th>Usable Range</th><th>Broadcast</th><th>Gateway</th><th>Usable Hosts</th></tr>
+    <tr><td><span class="dept-tag dept-admin">VLAN 10</span> Admin</td><td class="mono">10.23.0.0/26</td><td class="mono">.1 – .62</td><td class="mono">.63</td><td class="mono">.1</td><td>62 (8 used)</td></tr>
+    <tr><td><span class="dept-tag dept-sales">VLAN 20</span> Sales</td><td class="mono">10.23.0.64/26</td><td class="mono">.65 – .126</td><td class="mono">.127</td><td class="mono">.65</td><td>62 (12 used)</td></tr>
+    <tr><td><span class="dept-tag dept-wh">VLAN 30</span> Warehouse</td><td class="mono">10.23.0.128/26</td><td class="mono">.129 – .190</td><td class="mono">.191</td><td class="mono">.129</td><td>62 (20 used)</td></tr>
+    <tr><td><span class="dept-tag dept-srv">VLAN 40</span> Servers</td><td class="mono">10.23.0.192/26</td><td class="mono">.193 – .254</td><td class="mono">.255</td><td class="mono">.193</td><td>62 (3 used)</td></tr>
+  </table>
+
+  <div class="kicker" style="color:var(--navy)">4.3&nbsp; Infrastructure — 10.23.1.0/24 (kept separate from user VLANs)</div>
+  <table class="pro">
+    <tr><th>Purpose</th><th>Network / CIDR</th><th>Usable Range</th><th>Broadcast</th><th>Gateway</th><th>Usable Hosts</th></tr>
+    <tr><td>R1 – ISP WAN link</td><td class="mono">10.23.1.0/30</td><td class="mono">.1 – .2</td><td class="mono">.3</td><td>n/a</td><td>2 (point-to-point)</td></tr>
+    <tr><td><span class="dept-tag dept-infra">VLAN 99</span> Mgmt/Native</td><td class="mono">10.23.1.16/28</td><td class="mono">.17 – .30</td><td class="mono">.31</td><td class="mono">.17</td><td>14 (switches only)</td></tr>
+    <tr><td>Guest Wi-Fi (future)</td><td class="mono">10.23.1.32/28</td><td class="mono">.33 – .46</td><td class="mono">.47</td><td class="mono">.33</td><td>14 (reserved)</td></tr>
+    <tr><td>Free / future infra</td><td class="mono">10.23.1.48 – .255</td><td>—</td><td>—</td><td>—</td><td>208 addresses spare</td></tr>
+  </table>
+
+  <div class="kicker" style="color:var(--navy)">4.4&nbsp; How this plan satisfies the constraint and CR1</div>
+  <div class="split">
+    <div class="satisfy-card branch">
+      <div class="tag">Design Constraint</div>
+      <h3><svg class="icon"><use href="#i-building"/></svg>&nbsp; Branch Office</h3>
+      <p>The entire 10.23.128.0/17 (32,768 addresses) is reserved and untouched. Opening a branch requires only allocating from this pool — no re-addressing of the HQ site.</p>
+    </div>
+    <div class="satisfy-card cr1">
+      <div class="tag">Change Request CR1</div>
+      <h3><svg class="icon"><use href="#i-users"/></svg>&nbsp; +8 Staff, No Redesign</h3>
+      <p>Warehouse/Logistics (VLAN 30) is sized at /26 (62 usable) against 12 current staff. Adding 8 brings usage to 20/62 — well inside the existing subnet. No VLSM change, no re-cabling.</p>
+    </div>
+  </div>
+  <p class="section-desc" style="margin-top:12px"><strong>General headroom:</strong> 126 further /24 networks remain free inside the HQ /17 alone, before any branch-office space is touched — this design will not need revisiting for the foreseeable life of the business.</p>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 8 — SECTION 5: GITHUB REPOSITORY ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-git"/></svg><h1>5&nbsp;&nbsp;Initial GitHub Repository</h1></div>
+    <div class="sub">Section 5 of 5</div>
+  </div>
+
+  <p class="section-desc">Repository: <strong>tshimo-agri-network-cmpg325</strong> — the individual GitHub portfolio required by the module brief, tracking design documentation, configuration, and evidence through to final submission.</p>
+
+  <div class="kicker" style="color:var(--navy)">5.1&nbsp; Folder structure</div>
+  <div class="tree">tshimo-agri-network-cmpg325/<br>
+&nbsp;&nbsp;<span class="f">README.md</span> — overview, client summary, milestone tracker<br>
+&nbsp;&nbsp;<span class="d">docs/</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">01-client-requirements.md</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">02-physical-topology.md</span> <span class="c">(+ physical_topology.png)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">03-logical-topology.md</span> <span class="c">(+ logical_topology.png)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">04-ip-addressing-plan.md</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">05-change-requests.md</span><br>
+&nbsp;&nbsp;<span class="d">packet-tracer/</span> — final .pkt file (later milestones)<br>
+&nbsp;&nbsp;<span class="d">configs/</span> — per-device Cisco IOS command sets<br>
+&nbsp;&nbsp;<span class="d">screenshots/</span> — connectivity and configuration evidence<br>
+&nbsp;&nbsp;<span class="d">troubleshooting/</span> — fault isolation documentation (assigned challenge)</div>
+
+  <div class="kicker" style="color:var(--navy)">5.3&nbsp; Initial commit sequence</div>
+  <ul class="commit-list">
+    <li><code>git init</code> in project folder, add README.md and /docs skeleton</li>
+    <li>Commit 1 — add client requirements and project brief summary</li>
+    <li>Commit 2 — add physical and logical topology diagrams</li>
+    <li>Commit 3 — add IP addressing / VLSM plan</li>
+    <li>Push to GitHub and paste the repository link into the eFundi text box alongside this document</li>
+  </ul>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+<!-- ============ PAGE 9 — MILESTONE TRACKER + SIGN-OFF ============ -->
+<div class="page">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-flag"/></svg><h1>Milestone Tracker &amp; Sign-Off</h1></div>
+    <div class="sub">CMPG325-2026-042</div>
+  </div>
+
+  <div class="kicker" style="color:var(--navy)">Project timeline</div>
+  <div class="milestone-track">
+    <div class="m-row"><div class="m-dot m-done"></div><div class="label">Commencement</div><div class="date">14 Aug 2026</div><div class="status st-progress">Complete</div></div>
+    <div class="m-row"><div class="m-dot m-done"></div><div class="label">Milestone 1 — Design Review</div><div class="date">28 Aug 2026</div><div class="status st-progress">Package prepared</div></div>
+    <div class="m-row"><div class="m-dot m-pending"></div><div class="label">Milestone 2</div><div class="date">2 Oct 2026</div><div class="status st-pending">Not started</div></div>
+    <div class="m-row"><div class="m-dot m-pending"></div><div class="label">Final Submission</div><div class="date">16 Oct 2026</div><div class="status st-pending">Not started</div></div>
+  </div>
+
+  <div class="sign-box">
+    <div class="kicker" style="color:var(--navy)">Declaration</div>
+    <p style="font-size:12px; color:var(--muted); margin-top:8px; line-height:1.7;">
+      I declare that this design and its accompanying documentation are my own work, produced for CMPG 325 at North-West University, Mahikeng campus, in accordance with the NWU AI Policy. All design decisions above — department structure assumptions, VLAN/subnet allocation, and topology choices — are ones I understand and can defend.
+    </p>
+    <div style="display:flex; gap:60px; margin-top:10px;">
+      <div><div class="sign-line"></div><div style="font-size:11px; color:var(--muted)">Signature — Kurhula Success Maluleke</div></div>
+      <div><div class="sign-line" style="width:120px"></div><div style="font-size:11px; color:var(--muted)">Date</div></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+</div>
+
+</body>
+</html>

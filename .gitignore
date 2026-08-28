@@ -1,0 +1,22 @@
+# OS junk
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Packet Tracer autosave/lock files
+*.pkt.lock
+~$*.pkt
+
+# Office temp files
+~$*.docx
+~$*.doc
+
+# Local scratch/output
+*.tmp
+*.bak
