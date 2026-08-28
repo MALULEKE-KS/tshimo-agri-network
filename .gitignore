@@ -20,3 +20,6 @@ $RECYCLE.BIN/
 # Local scratch/output
 *.tmp
 *.bak
+
+# Local assistant/session config — not part of the submitted project
+CLAUDE.md
