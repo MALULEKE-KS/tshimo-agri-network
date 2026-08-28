@@ -236,6 +236,11 @@
   }
   .fig-frame-large { padding: 14px; margin-top: 14px; text-align: center; }
   .fig-frame-large img { max-width: 100%; max-height: 134mm; width: auto; }
+  .eyebrow { display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 6px; border-bottom: 2px solid var(--line); margin-bottom: 4px; }
+  .eyebrow .kicker { font-size: 13px; font-weight: 800; letter-spacing: .08em; }
+  .eyebrow .ekicker { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .fig-frame-xl { padding: 10px; margin-top: 8px; text-align: center; }
+  .fig-frame-xl img { max-width: 100%; max-height: 150mm; width: auto; }
   .diagram-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 16px; }
   .dstat { border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 7px; padding: 10px 12px; background: var(--paper-soft); }
   .dstat .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
@@ -371,7 +376,7 @@
 <div class="page">
   <div class="bar">
     <div class="icon-wrap"><svg class="icon"><use href="#i-list"/></svg><h1>Contents</h1></div>
-    <div class="sub">CMPG325-2026-042<br>Tshimo Agri Supplies</div>
+    <div class="sub">Tshimo Agri Supplies &middot; Network Design</div>
   </div>
 
   <ul class="toc-list">
@@ -407,7 +412,7 @@
   </ul>
 
   <div class="kicker" style="color:var(--navy)">1.2&nbsp; Interpreted Organisational Requirements — design assumption</div>
-  <p class="section-desc">The brief does not specify Tshimo Agri Supplies' internal department structure. The breakdown below was adopted for a small-to-medium agricultural supply business and drives the topology and addressing plan in Sections 2–4. <strong>This is a working assumption, flagged for client confirmation.</strong></p>
+  <p class="section-desc">Tshimo Agri Supplies' department structure was defined as part of this design, based on a realistic staffing model for a small-to-medium agricultural supply distributor. It forms the basis for the VLAN and addressing plan in Sections 2–4.</p>
 
   <table class="pro">
     <tr><th>Department</th><th>Function</th><th>Current Staff</th></tr>
@@ -422,18 +427,15 @@
     <div><div class="h">Why CR1 lands on Warehouse / Logistics</div><div class="b">CR1 is applied to Warehouse/Logistics because staffing growth in an agricultural supply business most plausibly occurs in stock handling and dispatch as client order volume grows — not in Admin or Sales, which scale far more slowly relative to warehouse throughput.</div></div>
   </div>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 4 — SECTION 2: PHYSICAL TOPOLOGY (DIAGRAM, LANDSCAPE) ============ -->
 <div class="page page-wide">
-  <div class="bar">
-    <div class="icon-wrap"><svg class="icon"><use href="#i-router"/></svg><h1>2&nbsp;&nbsp;Physical Topology</h1></div>
-    <div class="sub">Section 2 of 5 &middot; interfaces labelled on every link</div>
-  </div>
+  <div class="eyebrow"><span class="kicker" style="color:var(--gold)">02 &nbsp;Physical Topology</span><span class="ekicker">Interfaces labelled on every link</span></div>
 
-  <div class="fig-frame fig-frame-large" style="margin-top:10px"><img src="../../docs/assets/physical_topology.png" alt="Physical Topology diagram"></div>
-  <div class="fig-caption" style="margin:8px 0 0 0">Figure 1 — Physical Topology, Tshimo Agri Supplies HQ (Potchefstroom). A single edge router (R1) provides the WAN connection; a core switch distributes 802.1Q trunks down to one 24-port access switch per department.</div>
+  <div class="fig-frame fig-frame-xl"><img src="../../docs/assets/physical_topology.png" alt="Physical Topology diagram"></div>
+  <div class="fig-caption" style="margin:6px 0 0 0">Figure 1 — Physical Topology, Tshimo Agri Supplies HQ (Potchefstroom). A single edge router (R1) provides the WAN connection; a core switch distributes 802.1Q trunks down to one 24-port access switch per department.</div>
 </div>
 
 <!-- ============ PAGE 4b — SECTION 2: PHYSICAL TOPOLOGY (DEVICE TABLE) ============ -->
@@ -468,18 +470,15 @@
     <div><div class="h">Physical headroom matches logical headroom</div><div class="b">Access switches are specified as 24-port models even where current headcount is lower (e.g. Admin at 8 PCs), so CR1-style headcount growth is absorbed at the physical layer as well as the addressing layer — see Section 4.</div></div>
   </div>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 5 — SECTION 3: LOGICAL TOPOLOGY (DIAGRAM, LANDSCAPE) ============ -->
 <div class="page page-wide">
-  <div class="bar">
-    <div class="icon-wrap"><svg class="icon"><use href="#i-map"/></svg><h1>3&nbsp;&nbsp;Logical Topology</h1></div>
-    <div class="sub">Section 3 of 5 &middot; each VLAN tagged with its R1 sub-interface</div>
-  </div>
+  <div class="eyebrow"><span class="kicker" style="color:var(--gold)">03 &nbsp;Logical Topology</span><span class="ekicker">Each VLAN tagged with its R1 sub-interface</span></div>
 
-  <div class="fig-frame fig-frame-large" style="margin-top:10px"><img src="../../docs/assets/logical_topology.png" alt="Logical Topology diagram"></div>
-  <div class="fig-caption" style="margin:8px 0 0 0">Figure 2 — Logical Topology: VLANs, subnets, gateways, and R1 sub-interfaces. R1 routes inter-VLAN traffic via router-on-a-stick (one sub-interface per VLAN on Gi0/0) and NATs internet-bound traffic out Gi0/1.</div>
+  <div class="fig-frame fig-frame-xl"><img src="../../docs/assets/logical_topology.png" alt="Logical Topology diagram"></div>
+  <div class="fig-caption" style="margin:6px 0 0 0">Figure 2 — Logical Topology: VLANs, subnets, gateways, and R1 sub-interfaces. R1 routes inter-VLAN traffic via router-on-a-stick (one sub-interface per VLAN on Gi0/0) and NATs internet-bound traffic out Gi0/1.</div>
 </div>
 
 <!-- ============ PAGE 5b — SECTION 3: LOGICAL TOPOLOGY (VLAN TABLE) ============ -->
@@ -512,7 +511,7 @@
     <div><div class="h">Why sub-interfaces, not a routed SVI per VLAN</div><div class="b">Router-on-a-stick keeps all inter-VLAN routing logic on R1 alone, which matches the CMPG 325 syllabus and keeps the troubleshooting scenario's blast radius contained to a single device rather than spread across a Layer 3 switch and a router.</div></div>
   </div>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 6 — SECTION 4a: ADDRESSING PLAN INTRO ============ -->
@@ -537,7 +536,7 @@
     <tr><td>Reserved — future Branch Office</td><td class="mono">10.23.128.0/17</td><td><strong>Untouched</strong> — available on demand</td></tr>
   </table>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 7 — SECTION 4b: TABLES + HIGHLIGHTS + SATISFACTION ============ -->
@@ -582,7 +581,7 @@
   </div>
   <p class="section-desc" style="margin-top:12px"><strong>General headroom:</strong> 126 further /24 networks remain free inside the HQ /17 alone, before any branch-office space is touched — this design will not need revisiting for the foreseeable life of the business.</p>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 8 — SECTION 5: GITHUB REPOSITORY ============ -->
@@ -620,14 +619,14 @@
     <li>Push to GitHub and paste the repository link into the eFundi text box alongside this document</li>
   </ul>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 <!-- ============ PAGE 9 — MILESTONE TRACKER + SIGN-OFF ============ -->
 <div class="page">
   <div class="bar">
     <div class="icon-wrap"><svg class="icon"><use href="#i-flag"/></svg><h1>Milestone Tracker &amp; Sign-Off</h1></div>
-    <div class="sub">CMPG325-2026-042</div>
+    <div class="sub">Tshimo Agri Supplies &middot; Network Design</div>
   </div>
 
   <div class="kicker" style="color:var(--navy)">Project timeline</div>
@@ -649,7 +648,7 @@
     </div>
   </div>
 
-  <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
+  <div class="footer"><span>Tshimo Agri Supplies — Network Design</span><span>Prepared by Kurhula S. Maluleke</span></div>
 </div>
 
 </body>

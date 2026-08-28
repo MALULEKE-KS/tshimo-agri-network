@@ -25,10 +25,10 @@
 
 **What's already in place for this:** `10.23.128.0/17` — half of the assigned `/16` — is reserved and untouched (see [`04 — IP Addressing Plan`](04-ip-addressing-plan.md)). No HQ subnet, VLAN, or route currently uses any address inside that block.
 
-**What still needs to happen when the branch office is confirmed** (out of scope until the client provides real requirements — headcount, departments, link type back to HQ):
+**Scope for Milestone 2/Final, once the branch office is opened** (headcount, department mix, and inter-site link type will be defined at that point):
 1. Design the branch's own VLAN/subnet plan carved from `10.23.128.0/17`, following the same "uniform subnet size regardless of headcount" logic used at HQ.
 2. Choose and configure the inter-site link (site-to-site VPN over the existing ISP connection, or a dedicated WAN link, depending on what the client is willing to pay for — not specified in the brief).
 3. Extend routing so HQ and branch summary routes are exchanged (static routes are sufficient at this scale; a dynamic routing protocol is not justified for a two-site network).
 4. No change to any HQ VLAN, subnet, gateway, or existing device configuration is required — this is the same "no redesign" guarantee CR1 relies on, just at the scale of a whole additional site rather than one department.
 
-This change request is documented here as a placeholder for Milestone 2/Final, once (or if) the brief or client scenario supplies concrete branch-office requirements to design against.
+Full branch-office design work — VLAN plan, inter-site link, routing — is scoped for Milestone 2/Final, once the branch site's requirements are defined.

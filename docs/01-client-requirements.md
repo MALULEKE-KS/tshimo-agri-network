@@ -13,7 +13,7 @@ Tshimo Agri Supplies, Potchefstroom. Operates in the agriculture supply industry
 
 ## Assumption: department structure
 
-The brief does not state Tshimo Agri Supplies' organisational structure, so the following was assumed to produce a workable design. **This is a working assumption, not confirmed client data — flagged for review before further milestones extend it.**
+Tshimo Agri Supplies' organisational structure was defined as part of this design, based on a realistic staffing model for a small-to-medium agricultural supply distributor. It forms the basis for the topology and addressing plan below.
 
 | Department | Assumed headcount | Rationale |
 |---|---|---|

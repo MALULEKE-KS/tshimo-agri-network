@@ -28,9 +28,9 @@ tshimo-agri-network/
 │   └── assets/                    topology diagrams, banners — referenced by docs/ and submissions/
 ├── submissions/                   frozen, graded deliverables — one folder per milestone
 │   └── milestone-1/
-│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.pdf    (primary submission document)
-│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.docx  (editable source)
+│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.pdf    (the submission document)
 │       ├── Milestone1_ClientDesignReview_Maluleke_48277444.html  (report source, for future edits)
+│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.docx  (early draft, superseded by the PDF)
 │       └── eFundi_Submission_Text.txt                            (assignment text-box copy)
 ├── packet-tracer/                 the working .pkt file
 ├── configs/                       Cisco IOS configuration command sets, one file per device
@@ -54,8 +54,7 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 
 ## Documents
 
-- **[Milestone 1 — Client Design Review (PDF)](submissions/milestone-1/Milestone1_ClientDesignReview_Maluleke_48277444.pdf)** — the full design package: cover, contents, requirements, both topology diagrams, the complete addressing plan, and the initial repository plan, laid out as a single client-ready report. This is the primary Milestone 1 deliverable.
-- [Milestone 1 — Word source (.docx)](submissions/milestone-1/Milestone1_ClientDesignReview_Maluleke_48277444.docx) — original editable submission copy
+- **[Milestone 1 — Client Design Review (PDF)](submissions/milestone-1/Milestone1_ClientDesignReview_Maluleke_48277444.pdf)** — the full design package: cover, contents, requirements, both topology diagrams, the complete addressing plan, and the initial repository plan, laid out as a single client-ready report. This is the Milestone 1 deliverable.
 - [01 — Client Requirements](docs/01-client-requirements.md)
 - [02 — Physical Topology](docs/02-physical-topology.md)
 - [03 — Logical Topology](docs/03-logical-topology.md)

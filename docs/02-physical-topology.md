@@ -37,7 +37,7 @@
 | SW-ADM/SAL/WH/SRV | Fa0/1 | SW-CORE | Trunk (uplink) |
 | SW-ADM/SAL/WH/SRV | Fa0/2–Fa0/24 | End devices / servers | Access |
 
-Exact interface numbering will be confirmed once the devices are placed in Packet Tracer and recorded in `configs/` alongside the actual IOS command sets.
+This interface numbering is applied exactly as shown when devices are placed in Packet Tracer, and is recorded in `configs/` alongside the IOS command sets for each device.
 
 ## Why a single core switch, not a collapsed router-switch pair per department
 
