@@ -5,6 +5,7 @@
 <title>Milestone 1 — Client Design Review</title>
 <style>
   @page { size: A4; margin: 0; }
+  @page landscape { size: A4 landscape; margin: 0; }
   * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   html, body { margin: 0; padding: 0; }
   body {
@@ -46,6 +47,7 @@
     page-break-after: always;
   }
   .page:last-child { page-break-after: auto; }
+  .page-wide { page: landscape; width: 297mm; min-height: 210mm; padding: 12mm 16mm 10mm 16mm; }
 
   /* ---------- header bar (matches diagram figures) ---------- */
   .bar {
@@ -232,6 +234,12 @@
   .fig-caption {
     font-size: 10.5px; color: var(--muted); text-align: center; margin: 6px 0 12px 0; font-style: italic;
   }
+  .fig-frame-large { padding: 14px; margin-top: 14px; text-align: center; }
+  .fig-frame-large img { max-width: 100%; max-height: 134mm; width: auto; }
+  .diagram-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 16px; }
+  .dstat { border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 7px; padding: 10px 12px; background: var(--paper-soft); }
+  .dstat .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+  .dstat .v { font-size: 13px; color: var(--navy); font-weight: 700; margin-top: 3px; }
 
   .device-icon {
     width: 26px; height: 26px; border-radius: 6px;
@@ -417,25 +425,42 @@
   <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
 </div>
 
-<!-- ============ PAGE 4 — SECTION 2: PHYSICAL TOPOLOGY ============ -->
+<!-- ============ PAGE 4 — SECTION 2: PHYSICAL TOPOLOGY (DIAGRAM, LANDSCAPE) ============ -->
+<div class="page page-wide">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-router"/></svg><h1>2&nbsp;&nbsp;Physical Topology</h1></div>
+    <div class="sub">Section 2 of 5 &middot; interfaces labelled on every link</div>
+  </div>
+
+  <div class="fig-frame fig-frame-large" style="margin-top:10px"><img src="../../docs/assets/physical_topology.png" alt="Physical Topology diagram"></div>
+  <div class="fig-caption" style="margin:8px 0 0 0">Figure 1 — Physical Topology, Tshimo Agri Supplies HQ (Potchefstroom). A single edge router (R1) provides the WAN connection; a core switch distributes 802.1Q trunks down to one 24-port access switch per department.</div>
+</div>
+
+<!-- ============ PAGE 4b — SECTION 2: PHYSICAL TOPOLOGY (DEVICE TABLE) ============ -->
 <div class="page">
   <div class="bar">
     <div class="icon-wrap"><svg class="icon"><use href="#i-router"/></svg><h1>2&nbsp;&nbsp;Physical Topology</h1></div>
-    <div class="sub">Section 2 of 5</div>
+    <div class="sub">Section 2 of 5 (continued) — devices &amp; interfaces</div>
   </div>
 
   <p class="section-desc">A single edge router provides the WAN connection; a core switch distributes 802.1Q trunks down to one access switch per department, keeping every department electrically and logically separate while sharing a single router for inter-department routing.</p>
 
-  <div class="fig-frame"><img src="physical_topology.png" alt="Physical Topology diagram"></div>
-  <div class="fig-caption">Figure 1 — Physical Topology, Tshimo Agri Supplies HQ (Potchefstroom)</div>
+  <div class="diagram-stats" style="margin-bottom:16px">
+    <div class="dstat"><div class="k">Edge Router</div><div class="v">1 &times; R1 (Gi0/0, Gi0/1)</div></div>
+    <div class="dstat"><div class="k">Switch Layer</div><div class="v">1 core + 4 access (24-port)</div></div>
+    <div class="dstat"><div class="k">Uplinks</div><div class="v">802.1Q trunk, every link</div></div>
+    <div class="dstat"><div class="k">WAN Edge</div><div class="v">NAT/PAT &middot; 10.23.1.0/30</div></div>
+  </div>
 
   <table class="pro">
     <tr><th>Device</th><th>Role</th><th>Suggested PT Model</th><th>Key Interfaces</th></tr>
     <tr><td><span class="device-icon"><svg class="icon"><use href="#i-router"/></svg></span><strong>R1</strong></td><td>Edge router — WAN uplink, inter-VLAN routing (router-on-a-stick), NAT/PAT</td><td>Cisco 4321 / 2911</td><td class="mono">Gi0/0 (trunk to SW-CORE), Gi0/1 (WAN to ISP)</td></tr>
-    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-CORE</strong></td><td>Distribution switch — trunks VLANs between R1 and access layer</td><td>Cisco 2960</td><td class="mono">Trunk ports to R1 and each access switch</td></tr>
-    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-ADM / SW-SAL / SW-WH</strong></td><td>Access switches — one per department</td><td>Cisco 2960 (24-port)</td><td class="mono">Access ports to PCs, uplink trunk to core</td></tr>
-    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-SRV</strong></td><td>Access switch — server segment</td><td>Cisco 2960</td><td class="mono">Access ports to DHCP/DNS/File servers</td></tr>
-    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-monitor"/></svg></span><strong>End devices</strong></td><td>Department PCs + 3 servers</td><td>PC-PT / Server-PT</td><td class="mono">FastEthernet to access switch</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-CORE</strong></td><td>Distribution switch — trunks VLANs between R1 and access layer</td><td>Cisco 2960</td><td class="mono">Gi0/1 (to R1), Gi0/2–Gi0/5 (to access switches)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-ADM</strong></td><td>Access switch — Admin/Management VLAN</td><td>Cisco 2960 (24-port)</td><td class="mono">Fa0/1 (uplink to SW-CORE Gi0/2), Fa0/2–0/9 (PCs)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-SAL</strong></td><td>Access switch — Sales VLAN</td><td>Cisco 2960 (24-port)</td><td class="mono">Fa0/1 (uplink to SW-CORE Gi0/3), Fa0/2–0/13 (PCs)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-WH</strong></td><td>Access switch — Warehouse/Logistics VLAN (CR1 department)</td><td>Cisco 2960 (24-port)</td><td class="mono">Fa0/1 (uplink to SW-CORE Gi0/4), Fa0/2–0/21 (PCs)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-switch"/></svg></span><strong>SW-SRV</strong></td><td>Access switch — server segment</td><td>Cisco 2960 (24-port)</td><td class="mono">Fa0/1 (uplink to SW-CORE Gi0/5), Fa0/2–0/4 (servers)</td></tr>
+    <tr><td><span class="device-icon"><svg class="icon"><use href="#i-monitor"/></svg></span><strong>End devices</strong></td><td>Department PCs + 3 servers (DHCP, DNS, File)</td><td>PC-PT / Server-PT</td><td class="mono">FastEthernet to access switch, access mode</td></tr>
   </table>
 
   <div class="num-card">
@@ -446,26 +471,46 @@
   <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
 </div>
 
-<!-- ============ PAGE 5 — SECTION 3: LOGICAL TOPOLOGY ============ -->
+<!-- ============ PAGE 5 — SECTION 3: LOGICAL TOPOLOGY (DIAGRAM, LANDSCAPE) ============ -->
+<div class="page page-wide">
+  <div class="bar">
+    <div class="icon-wrap"><svg class="icon"><use href="#i-map"/></svg><h1>3&nbsp;&nbsp;Logical Topology</h1></div>
+    <div class="sub">Section 3 of 5 &middot; each VLAN tagged with its R1 sub-interface</div>
+  </div>
+
+  <div class="fig-frame fig-frame-large" style="margin-top:10px"><img src="../../docs/assets/logical_topology.png" alt="Logical Topology diagram"></div>
+  <div class="fig-caption" style="margin:8px 0 0 0">Figure 2 — Logical Topology: VLANs, subnets, gateways, and R1 sub-interfaces. R1 routes inter-VLAN traffic via router-on-a-stick (one sub-interface per VLAN on Gi0/0) and NATs internet-bound traffic out Gi0/1.</div>
+</div>
+
+<!-- ============ PAGE 5b — SECTION 3: LOGICAL TOPOLOGY (VLAN TABLE) ============ -->
 <div class="page">
   <div class="bar">
     <div class="icon-wrap"><svg class="icon"><use href="#i-map"/></svg><h1>3&nbsp;&nbsp;Logical Topology</h1></div>
-    <div class="sub">Section 3 of 5</div>
+    <div class="sub">Section 3 of 5 (continued) — VLAN table</div>
   </div>
 
   <p class="section-desc">Each department is a separate VLAN. R1 performs inter-VLAN routing using a router-on-a-stick design (one sub-interface per VLAN on Gi0/0), and provides the default route out to the ISP on Gi0/1 with NAT/PAT for internet-bound traffic. DHCP is served from a dedicated DHCP server in the Server VLAN rather than the router, reflecting realistic enterprise practice.</p>
 
-  <div class="fig-frame"><img src="logical_topology.png" alt="Logical Topology diagram"></div>
-  <div class="fig-caption">Figure 2 — Logical Topology: VLANs, subnets and default gateways</div>
+  <div class="diagram-stats" style="margin-bottom:16px">
+    <div class="dstat"><div class="k">VLANs</div><div class="v">5 &middot; 10/20/30/40/99</div></div>
+    <div class="dstat"><div class="k">Routing</div><div class="v">Router-on-a-stick, 1 sub-if / VLAN</div></div>
+    <div class="dstat"><div class="k">DHCP</div><div class="v">Dedicated server, VLAN 40</div></div>
+    <div class="dstat"><div class="k">Summary Route</div><div class="v">10.23.0.0/23 upstream</div></div>
+  </div>
 
   <table class="pro">
-    <tr><th>VLAN</th><th>Name</th><th>Purpose</th><th>Subnet</th></tr>
-    <tr><td><span class="dept-tag dept-admin">10</span></td><td>ADMIN</td><td>Administration / Management</td><td class="mono">10.23.0.0/26</td></tr>
-    <tr><td><span class="dept-tag dept-sales">20</span></td><td>SALES</td><td>Sales</td><td class="mono">10.23.0.64/26</td></tr>
-    <tr><td><span class="dept-tag dept-wh">30</span></td><td>WAREHOUSE</td><td>Warehouse / Logistics (CR1 department)</td><td class="mono">10.23.0.128/26</td></tr>
-    <tr><td><span class="dept-tag dept-srv">40</span></td><td>SERVERS</td><td>DHCP, DNS, File/ERP servers</td><td class="mono">10.23.0.192/26</td></tr>
-    <tr><td><span class="dept-tag dept-infra">99</span></td><td>MGMT-NATIVE</td><td>Switch management / native VLAN (no user traffic)</td><td class="mono">10.23.1.16/28</td></tr>
+    <tr><th>VLAN</th><th>Name</th><th>Purpose</th><th>Subnet</th><th>R1 Sub-interface</th></tr>
+    <tr><td><span class="dept-tag dept-admin">10</span></td><td>ADMIN</td><td>Administration / Management</td><td class="mono">10.23.0.0/26</td><td class="mono">Gi0/0.10</td></tr>
+    <tr><td><span class="dept-tag dept-sales">20</span></td><td>SALES</td><td>Sales</td><td class="mono">10.23.0.64/26</td><td class="mono">Gi0/0.20</td></tr>
+    <tr><td><span class="dept-tag dept-wh">30</span></td><td>WAREHOUSE</td><td>Warehouse / Logistics (CR1 department)</td><td class="mono">10.23.0.128/26</td><td class="mono">Gi0/0.30</td></tr>
+    <tr><td><span class="dept-tag dept-srv">40</span></td><td>SERVERS</td><td>DHCP, DNS, File/ERP servers</td><td class="mono">10.23.0.192/26</td><td class="mono">Gi0/0.40</td></tr>
+    <tr><td><span class="dept-tag dept-infra">99</span></td><td>MGMT-NATIVE</td><td>Switch management / native VLAN (no user traffic)</td><td class="mono">10.23.1.16/28</td><td class="mono">Gi0/0.99</td></tr>
   </table>
+
+  <div class="num-card">
+    <div class="n">i</div>
+    <div><div class="h">Why sub-interfaces, not a routed SVI per VLAN</div><div class="b">Router-on-a-stick keeps all inter-VLAN routing logic on R1 alone, which matches the CMPG 325 syllabus and keeps the troubleshooting scenario's blast radius contained to a single device rather than spread across a Layer 3 switch and a router.</div></div>
+  </div>
 
   <div class="footer"><span>Tshimo Agri Supplies — Network Design &middot; CMPG325-2026-042</span><span>Maluleke, K.S. &middot; 48277444</span></div>
 </div>
@@ -502,7 +547,7 @@
     <div class="sub">Section 4 of 5 (continued)</div>
   </div>
 
-  <div class="fig-frame" style="padding:14px;"><img src="highlights_banner.png" alt="Design highlights banner"></div>
+  <div class="fig-frame" style="padding:14px;"><img src="../../docs/assets/highlights_banner.png" alt="Design highlights banner"></div>
 
   <div class="kicker" style="color:var(--navy)">4.2&nbsp; Business VLANs — 10.23.0.0/24 (uniform /26 blocks)</div>
   <table class="pro">
@@ -552,12 +597,15 @@
   <div class="kicker" style="color:var(--navy)">5.1&nbsp; Folder structure</div>
   <div class="tree">tshimo-agri-network/<br>
 &nbsp;&nbsp;<span class="f">README.md</span> — overview, client summary, milestone tracker<br>
-&nbsp;&nbsp;<span class="d">docs/</span><br>
+&nbsp;&nbsp;<span class="d">docs/</span> <span class="c">— living design documentation</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">01-client-requirements.md</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">02-physical-topology.md</span> <span class="c">(+ physical_topology.png)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">03-logical-topology.md</span> <span class="c">(+ logical_topology.png)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">02-physical-topology.md</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="f">03-logical-topology.md</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">04-ip-addressing-plan.md</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">05-change-requests.md</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="d">assets/</span> <span class="c">(physical/logical topology PNGs, banner)</span><br>
+&nbsp;&nbsp;<span class="d">submissions/</span> <span class="c">— frozen, graded deliverables per milestone</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="d">milestone-1/</span> <span class="c">(this PDF, .docx source, eFundi text)</span><br>
 &nbsp;&nbsp;<span class="d">packet-tracer/</span> — final .pkt file (later milestones)<br>
 &nbsp;&nbsp;<span class="d">configs/</span> — per-device Cisco IOS command sets<br>
 &nbsp;&nbsp;<span class="d">screenshots/</span> — connectivity and configuration evidence<br>

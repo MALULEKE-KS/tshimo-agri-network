@@ -1,6 +1,6 @@
 # 03 — Logical Topology
 
-![Logical Topology](logical_topology.png)
+![Logical Topology](assets/logical_topology.png)
 
 ## VLANs
 

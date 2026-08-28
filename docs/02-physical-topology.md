@@ -1,6 +1,6 @@
 # 02 — Physical Topology
 
-![Physical Topology](physical_topology.png)
+![Physical Topology](assets/physical_topology.png)
 
 ## Devices
 
