@@ -1,0 +1,30 @@
+MILESTONE 1 — CLIENT DESIGN REVIEW
+Kurhula Success Maluleke | 48277444 | Project ID CMPG325-2026-042
+
+Client: Tshimo Agri Supplies (Potchefstroom, Agriculture)
+Assigned addressing block: 10.23.0.0/16
+Assigned networking challenge: Network Troubleshooting (fault isolation scenario) — Advanced
+
+Full design package is attached as PDF (with the original .docx also attached as source). It covers all five required sections:
+
+1. CLIENT REQUIREMENTS
+Stated brief requirements (assigned block, branch-office constraint within 18 months, Change Request CR1 for +8 staff, assigned troubleshooting challenge) plus the interpreted department structure adopted to drive the design, since the brief does not specify Tshimo Agri Supplies' org structure: Admin/Management (8), Sales (12), Warehouse/Logistics (12, +8 under CR1 = 20), Servers (3). Flagged as a working assumption for client confirmation.
+
+2. PHYSICAL TOPOLOGY
+Single edge router (R1 — router-on-a-stick, NAT/PAT to ISP) to a core switch (SW-CORE, 802.1Q trunking) to one access switch per department (SW-ADM, SW-SAL, SW-WH, SW-SRV). 24-port access switches used even for low-headcount departments so physical port headroom matches the addressing headroom. See Figure 1 in the attached PDF.
+
+3. LOGICAL TOPOLOGY
+Five VLANs: 10 (Admin), 20 (Sales), 30 (Warehouse/Logistics — the CR1 department), 40 (Servers), and 99 (Mgmt/Native). R1 performs inter-VLAN routing via router-on-a-stick sub-interfaces, with NAT/PAT for internet-bound traffic and DHCP served from the Server VLAN. See Figure 2 in the attached PDF.
+
+4. IP ADDRESSING PLAN
+10.23.0.0/16 is split at the /17 level: 10.23.0.0/17 is in use for HQ (uniform /26 per department VLAN plus a /24 for infrastructure — WAN link, management/native VLAN, reserved guest Wi-Fi), and 10.23.128.0/17 is reserved untouched for the branch-office constraint. Every department VLAN is a uniform /26 (62 usable hosts) regardless of current headcount, so Change Request CR1 (+8 staff in Warehouse/Logistics, 12 -> 20) is absorbed entirely within the existing subnet — no re-addressing, no re-cabling beyond plugging in new devices. Full breakdown, including the business-VLAN and infrastructure address tables, is in Section 4 of the attached PDF.
+
+5. INITIAL GITHUB REPOSITORY
+Public repository created and pushed:
+https://github.com/MALULEKE-KS/tshimo-agri-network
+
+Contains README.md, full docs/ (client requirements, physical topology, logical topology, IP addressing plan, change requests — plus the two topology diagrams and this design review document), and placeholder folders (packet-tracer/, configs/, screenshots/, troubleshooting/) ready for Milestone 2 and Final submission.
+
+ATTACHMENTS
+- Milestone1_ClientDesignReview_Maluleke_48277444.pdf (primary submission document)
+- Milestone1_ClientDesignReview_Maluleke_48277444.docx (editable source)
