@@ -49,7 +49,7 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 | Milestone | Due | Status |
 |---|---|---|
 | Milestone 1 — Client Design Review | 28 Aug 2026 | Design package finalised, ready for eFundi submission |
-| Milestone 2 | 2 Oct 2026 | Not started |
+| Milestone 2 | 2 Oct 2026 | In progress — physical topology built in Packet Tracer; device configs drafted, not yet applied |
 | Final submission | 16 Oct 2026 | Not started |
 
 ## Documents
@@ -60,3 +60,7 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 - [03 — Logical Topology](docs/03-logical-topology.md)
 - [04 — IP Addressing Plan](docs/04-ip-addressing-plan.md)
 - [05 — Change Requests](docs/05-change-requests.md)
+- [06 — Project Status and Milestone 2 Control Record](docs/06-project-status-and-milestone-2-control.md)
+- [07 — Physical Build Design](docs/07-physical-build-design.md)
+- [08 — Milestone 2 Execution Map](docs/08-milestone-2-execution-map.md)
+- [09 — Packet Tracer Build Walkthrough](docs/09-packet-tracer-build-walkthrough.md)
