@@ -49,7 +49,7 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 | Milestone | Due | Status |
 |---|---|---|
 | Milestone 1 — Client Design Review | 28 Aug 2026 | Design package finalised, ready for eFundi submission |
-| Milestone 2 | 2 Oct 2026 | In progress — physical topology built in Packet Tracer; device configs drafted, not yet applied |
+| Milestone 2 | 2 Oct 2026 | Implemented and tested — network configured in Packet Tracer, 12/12 tests passing, assigned fault demonstrated and repaired; package in [`submissions/milestone-2/`](submissions/milestone-2/) |
 | Final submission | 16 Oct 2026 | Not started |
 
 ## Documents
@@ -64,3 +64,6 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 - [07 — Physical Build Design](docs/07-physical-build-design.md)
 - [08 — Milestone 2 Execution Map](docs/08-milestone-2-execution-map.md)
 - [09 — Packet Tracer Build Walkthrough](docs/09-packet-tracer-build-walkthrough.md)
+- [10 — Milestone 2 Test Results](docs/10-test-results.md)
+- [Advanced Fault Isolation record](troubleshooting/advanced-fault-isolation.md)
+- **[Milestone 2 — Client Implementation Review (PDF)](submissions/milestone-2/Milestone2_ClientImplementationReview_Maluleke_48277444.pdf)** — the full implementation report with all testing and troubleshooting evidence. Submitted with [`tshimo-agri-hq-milestone-2.pkt`](packet-tracer/tshimo-agri-hq-milestone-2.pkt).

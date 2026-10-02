@@ -1,0 +1,1050 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Milestone 2 — Client Implementation Review</title>
+<style>
+  @page {
+    size: A4; margin: 13mm 15mm 15mm 15mm;
+    @bottom-left { content: "Tshimo Agri Supplies — Milestone 2 Client Implementation Review"; font-family: "Segoe UI", Arial, sans-serif; font-size: 8pt; color: #5b6472; }
+    @bottom-right { content: "Page " counter(page) " of " counter(pages); font-family: "Segoe UI", Arial, sans-serif; font-size: 8pt; color: #5b6472; }
+  }
+  @page :first { @bottom-left { content: none; } @bottom-right { content: none; } }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Calibri", "Helvetica Neue", Arial, sans-serif;
+    color: #1a2233; background: #ffffff; font-size: 12.4px; line-height: 1.55;
+  }
+  :root{
+    --navy: #14264a; --navy-deep: #0c1830; --gold: #c9992c;
+    --admin: #2f5fa8; --admin-bg: #eaf0fa; --sales: #6c4fa1; --sales-bg: #f1ecf8;
+    --warehouse: #b8791b; --warehouse-bg: #fbf1de; --servers: #1c8a72; --servers-bg: #e6f5f1;
+    --infra: #4a5568; --infra-bg: #eef0f3; --ink: #1a2233; --muted: #5b6472;
+    --line: #dbe0e8; --paper-soft: #f6f7fa; --fail: #b3261e; --fail-bg: #fbe9e7;
+  }
+  svg { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.15em; }
+
+  .section { break-before: page; }
+  .keep { break-inside: avoid; }
+
+  .bar {
+    background: linear-gradient(90deg, var(--navy-deep), var(--navy)); color: #fff;
+    border-radius: 8px; padding: 13px 20px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 4px solid var(--gold); margin-bottom: 16px;
+  }
+  .bar h1 { font-size: 18px; margin: 0; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+  .bar .sub { font-size: 11px; opacity: .85; text-align: right; }
+  .bar .icon-wrap { display:flex; align-items:center; gap:10px; }
+  .bar .icon-wrap svg { width: 22px; height: 22px; }
+
+  .kicker { color: var(--gold); font-weight: 700; letter-spacing: .12em; font-size: 10.5px; text-transform: uppercase; }
+  h3.sub-h { font-size: 13.5px; color: var(--navy); margin: 16px 0 4px 0; break-after: avoid; }
+  p { margin: 0 0 9px 0; }
+  p.lead { color: var(--muted); font-size: 12px; margin: 0 0 12px 0; }
+  code, .mono { font-family: "Consolas", "Courier New", monospace; font-size: 11.2px; }
+  code { background: var(--paper-soft); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+
+  /* cover */
+  .cover { display: flex; flex-direction: column; height: 268mm; }
+  .cover-badge { align-self: flex-start; background: var(--navy); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; padding: 6px 14px; border-radius: 999px; text-transform: uppercase; }
+  .cover h1 { font-size: 34px; color: var(--navy); margin: 22px 0 6px 0; line-height: 1.15; }
+  .cover h2 { font-size: 16px; color: var(--gold); font-weight: 600; margin: 0 0 26px 0; text-transform: uppercase; letter-spacing: .06em; }
+  .cover-rule { height: 3px; width: 90px; background: var(--gold); margin: 0 0 22px 0; }
+  .cover-strip { display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip { display:flex; align-items:center; gap:6px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font-size: 11px; color: var(--navy); font-weight: 600; }
+  .chip svg { width: 14px; height: 14px; }
+  .cover-hero { margin-top: 26px; border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--paper-soft); text-align: center; }
+  .cover-hero img { max-width: 100%; max-height: 92mm; }
+  .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+  .id-card { border: 1px solid var(--line); border-left: 4px solid var(--navy); border-radius: 6px; padding: 9px 14px; background: var(--paper-soft); }
+  .id-card .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  .id-card .v { font-size: 13.5px; color: var(--ink); font-weight: 700; margin-top: 2px; }
+  .cover-footer-block { margin-top: 18px; border-top: 2px solid var(--navy); padding-top: 10px; display: flex; justify-content: space-between; font-size: 10.5px; color: var(--muted); }
+
+  /* contents */
+  .toc-list { list-style: none; margin: 0; padding: 0; }
+  .toc-list li { display: flex; align-items: center; gap: 14px; padding: 9px 6px; border-bottom: 1px solid var(--line); }
+  .toc-num { width: 28px; height: 28px; border-radius: 7px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12.5px; flex: none; }
+  .toc-list .t-title { font-weight: 700; color: var(--ink); font-size: 13px; }
+  .toc-list .t-desc { color: var(--muted); font-size: 11px; }
+  .toc-list .t-main { flex: 1; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 6px 0; }
+  .dstat { border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 7px; padding: 9px 12px; background: var(--paper-soft); }
+  .dstat .k { font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+  .dstat .v { font-size: 15px; color: var(--navy); font-weight: 700; margin-top: 2px; }
+  .dstat.ok { border-left-color: var(--servers); }
+
+  .philosophy { margin-top: 16px; background: var(--navy); color: #fff; border-radius: 10px; padding: 18px 22px; }
+  .philosophy p { font-size: 12.8px; line-height: 1.65; margin: 6px 0 0 0; }
+
+  /* tables */
+  table.pro { width: 100%; border-collapse: collapse; margin: 6px 0 12px 0; font-size: 11.3px; }
+  table.pro th { text-align: left; background: var(--navy); color: #fff; padding: 6px 9px; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  table.pro td { padding: 5px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.pro tr { break-inside: avoid; }
+  table.pro tr:nth-child(even) td { background: var(--paper-soft); }
+  table.pro td.mono { font-family: "Consolas", "Courier New", monospace; font-weight: 600; font-size: 11px; }
+
+  .pass { display:inline-block; background: var(--servers-bg); color: var(--servers); font-weight: 700; font-size: 10px; padding: 1px 8px; border-radius: 999px; }
+  .fail { display:inline-block; background: var(--fail-bg); color: var(--fail); font-weight: 700; font-size: 10px; padding: 1px 8px; border-radius: 999px; }
+  .dept-tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+  .dept-admin { background: var(--admin-bg); color: var(--admin); }
+  .dept-sales { background: var(--sales-bg); color: var(--sales); }
+  .dept-wh { background: var(--warehouse-bg); color: var(--warehouse); }
+  .dept-srv { background: var(--servers-bg); color: var(--servers); }
+  .dept-infra { background: var(--infra-bg); color: var(--infra); }
+
+  /* figures */
+  figure { margin: 8px 0 12px 0; break-inside: avoid; }
+  .frame { border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--paper-soft); text-align: center; }
+  .frame img { max-width: 100%; max-height: 92mm; display: inline-block; border-radius: 3px; }
+  figure.lg .frame img { max-height: 135mm; }
+  figure.sm .frame img { max-height: 55mm; }
+  figcaption { font-size: 10.4px; color: var(--muted); text-align: center; margin-top: 5px; font-style: italic; }
+  figcaption b { color: var(--navy); font-style: normal; }
+  .fig-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fig-row figure { margin: 6px 0 10px 0; }
+
+  /* callouts */
+  .note { border: 1px solid var(--line); border-left: 4px solid var(--gold); background: #fffaf0; border-radius: 6px; padding: 9px 13px; margin: 8px 0 12px 0; font-size: 11.6px; break-inside: avoid; }
+  .note.info { border-left-color: var(--admin); background: var(--admin-bg); }
+  .note.ok { border-left-color: var(--servers); background: var(--servers-bg); }
+  .note b.h { color: var(--navy); }
+
+  .cmd { background: var(--navy-deep); color: #dfe6f5; border-radius: 7px; padding: 10px 14px; font-family: "Consolas","Courier New",monospace; font-size: 11px; line-height: 1.6; margin: 6px 0 12px 0; white-space: pre; break-inside: avoid; }
+  .cmd .c { color: #8fd9b6; }
+
+  .steps { list-style: none; margin: 4px 0 12px 0; padding: 0; counter-reset: s; }
+  .steps li { counter-increment: s; display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 11.8px; break-inside: avoid; }
+  .steps li::before { content: counter(s); width: 20px; height: 20px; border-radius: 50%; background: var(--gold); color: #fff; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; margin-top: 1px; }
+
+  .tree { background: var(--navy-deep); color: #dfe6f5; border-radius: 8px; padding: 13px 16px; font-family: "Consolas","Courier New",monospace; font-size: 10.8px; line-height: 1.7; margin: 6px 0 14px 0; white-space: pre; }
+  .tree .d { color: #7fb2ff; } .tree .f { color: #f0c766; } .tree .c { color: #8fd9b6; }
+
+  .sign-box { border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; margin-top: 16px; break-inside: avoid; }
+  .sign-line { border-bottom: 1px solid var(--ink); width: 60%; margin: 26px 0 6px 0; }
+  .milestone-track { display: grid; gap: 10px; margin-top: 10px; }
+  .m-row { display: flex; align-items: center; gap: 12px; }
+  .m-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .m-done { background: var(--servers); }
+  .m-pending { background: var(--line); border: 2px solid var(--muted); }
+  .m-row .label { font-weight: 700; font-size: 12px; color: var(--ink); width: 210px; }
+  .m-row .date { font-size: 11px; color: var(--muted); width: 100px; }
+  .m-row .status { font-size: 10.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+  .st-done { background: var(--servers-bg); color: var(--servers); }
+  .st-progress { background: #fdf1d8; color: var(--gold); }
+  .st-pending { background: var(--infra-bg); color: var(--infra); }
+
+  /* appendix */
+  .cfg-cols { column-count: 2; column-gap: 14px; }
+  .cfg { margin: 0 0 10px 0; }
+  .cfg-head { background: var(--navy); color: #fff; font-weight: 700; font-size: 10.5px; padding: 4px 10px; border-radius: 6px 6px 0 0; letter-spacing: .04em; break-after: avoid; }
+  .cfg pre { margin: 0; border: 1px solid var(--line); border-top: none; border-radius: 0 0 6px 6px; background: var(--paper-soft); padding: 7px 9px; font-family: "Consolas","Courier New",monospace; font-size: 8.3px; line-height: 1.34; white-space: pre-wrap; word-break: break-word; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+<defs>
+  <symbol id="i-router" viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="6" rx="1.5"/><circle cx="8" cy="17" r="1"/><circle cx="12" cy="17" r="1"/><path d="M6 14v-3a6 6 0 0 1 12 0v3"/></symbol>
+  <symbol id="i-switch" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="1.5"/><circle cx="7" cy="12" r=".8"/><circle cx="10.3" cy="12" r=".8"/><circle cx="13.6" cy="12" r=".8"/><circle cx="16.9" cy="12" r=".8"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="6" rx="1.2"/><rect x="4" y="15" width="16" height="6" rx="1.2"/><circle cx="8" cy="6" r=".8"/><circle cx="8" cy="18" r=".8"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-git" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="9" r="2.2"/><path d="M6 8v8M6 12c0-3.3 2.7-3 6-3h1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="18" r="2.3"/><path d="M8 6h6a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H8"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 3v18"/><path d="M5 4h13l-3 4 3 4H5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5M12 17.5v.2"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></symbol>
+  <symbol id="i-cable" viewBox="0 0 24 24"><path d="M4 6h4v4H4zM16 14h4v4h-4z"/><path d="M8 8h3a3 3 0 0 1 3 3v2a3 3 0 0 0 3 3"/></symbol>
+</defs>
+</svg>
+
+<!-- ================= COVER ================= -->
+<div class="cover">
+  <div class="cover-badge">CMPG 325 &middot; Computer Networks &middot; NWU Mahikeng</div>
+  <h1>Client Implementation Review</h1>
+  <h2>Milestone 2 &nbsp;&middot;&nbsp; Tshimo Agri Supplies Network Implementation</h2>
+  <div class="cover-rule"></div>
+  <div class="cover-strip">
+    <div class="chip"><svg><use href="#i-building"/></svg> Potchefstroom HQ, Agriculture</div>
+    <div class="chip"><svg><use href="#i-grid"/></svg> 10.23.0.0/16</div>
+    <div class="chip"><svg><use href="#i-shield"/></svg> Fault Isolation — Advanced</div>
+    <div class="chip"><svg><use href="#i-check"/></svg> 12 / 12 tests passed</div>
+  </div>
+  <div class="cover-hero"><img src="figures/01-physical-topology.png" alt="Implemented HQ topology in Cisco Packet Tracer"></div>
+  <div class="id-grid">
+    <div class="id-card"><div class="k">Student</div><div class="v">Maluleke, Kurhula Success</div></div>
+    <div class="id-card"><div class="k">Student Number</div><div class="v">48277444</div></div>
+    <div class="id-card"><div class="k">Project ID</div><div class="v">CMPG325-2026-042</div></div>
+    <div class="id-card"><div class="k">Client ID</div><div class="v">CLI-042</div></div>
+    <div class="id-card"><div class="k">Assigned Client</div><div class="v">Tshimo Agri Supplies</div></div>
+    <div class="id-card"><div class="k">Assigned Challenge</div><div class="v">Network Troubleshooting</div></div>
+  </div>
+  <div class="cover-footer-block">
+    <span>Milestone 2 — Client Implementation Review — 2 October 2026</span>
+    <span>GitHub portfolio: <a href="https://github.com/MALULEKE-KS/tshimo-agri-network" style="color:var(--navy);font-weight:600">github.com/MALULEKE-KS/tshimo-agri-network</a></span>
+  </div>
+</div>
+
+<!-- ================= CONTENTS ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-list"/></svg><h1>Contents</h1></div><div class="sub">Tshimo Agri Supplies &middot; Network Implementation</div></div>
+  <ul class="toc-list">
+    <li><div class="toc-num">1</div><div class="t-main"><div class="t-title">Implementation Overview</div><div class="t-desc">What was built, on which devices, and how Milestone 2's requirements are met</div></div></li>
+    <li><div class="toc-num">2</div><div class="t-main"><div class="t-title">Physical Build &amp; Cabling</div><div class="t-desc">Device placement, port map, cable types and the corrections made during the build</div></div></li>
+    <li><div class="toc-num">3</div><div class="t-main"><div class="t-title">Switching — VLANs &amp; Trunks</div><div class="t-desc">VLAN database, 802.1Q trunks, native VLAN 99, access ports, management SVIs</div></div></li>
+    <li><div class="toc-num">4</div><div class="t-main"><div class="t-title">Routing, WAN &amp; NAT</div><div class="t-desc">Router-on-a-stick on R1, default route to the ISP, NAT/PAT overload</div></div></li>
+    <li><div class="toc-num">5</div><div class="t-main"><div class="t-title">Network Services</div><div class="t-desc">Central DHCP with relay, internal DNS, and the file/web server</div></div></li>
+    <li><div class="toc-num">6</div><div class="t-main"><div class="t-title">Testing &amp; Evidence</div><div class="t-desc">Twelve functional tests run in Packet Tracer, with the captured results</div></div></li>
+    <li><div class="toc-num">7</div><div class="t-main"><div class="t-title">Assigned Challenge — Advanced Fault Isolation</div><div class="t-desc">A VLAN pruned from a trunk: baseline, symptoms, layered isolation, root cause, fix, verification</div></div></li>
+    <li><div class="toc-num">8</div><div class="t-main"><div class="t-title">Issues Encountered &amp; Resolutions</div><div class="t-desc">Problems hit during implementation, how each was detected, and how it was fixed</div></div></li>
+    <li><div class="toc-num">9</div><div class="t-main"><div class="t-title">Change Request &amp; Growth Readiness</div><div class="t-desc">CR1 implemented on the live network; branch-office space still untouched</div></div></li>
+    <li><div class="toc-num">10</div><div class="t-main"><div class="t-title">GitHub Portfolio</div><div class="t-desc">Repository structure and commit history for this milestone</div></div></li>
+    <li><div class="toc-num">A</div><div class="t-main"><div class="t-title">Appendix — Device Configurations</div><div class="t-desc">The IOS command sets applied to every switch and router, verbatim</div></div></li>
+  </ul>
+  <div class="stat-grid">
+    <div class="dstat"><div class="k">Network devices</div><div class="v">7</div></div>
+    <div class="dstat"><div class="k">End devices</div><div class="v">40 PCs + 3 servers</div></div>
+    <div class="dstat"><div class="k">Physical links</div><div class="v">49</div></div>
+    <div class="dstat"><div class="k">VLANs</div><div class="v">10 · 20 · 30 · 40 · 99</div></div>
+    <div class="dstat ok"><div class="k">Functional tests</div><div class="v">12 / 12 passed</div></div>
+    <div class="dstat ok"><div class="k">Assigned fault</div><div class="v">Isolated &amp; repaired</div></div>
+  </div>
+  <div class="philosophy">
+    <div class="kicker">Implementation approach</div>
+    <p>The Milestone 1 design was built without changing a single VLAN, subnet or gateway. Every configuration was written as a reviewable command file first, applied one device at a time, and checked with a <code style="background:transparent;border:none;color:#f0c766">show</code> command before moving on. Every claim in this document is backed by a screenshot taken from the running Packet Tracer network.</p>
+  </div>
+</div>
+
+<!-- ================= 1 OVERVIEW ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-map"/></svg><h1>1&nbsp;&nbsp;Implementation Overview</h1></div><div class="sub">Section 1 of 10</div></div>
+  <p class="lead">Milestone 2 turns the approved Milestone 1 design into a working network in Cisco Packet Tracer 9.0.1, then proves it works and demonstrates the assigned troubleshooting challenge on it.</p>
+
+  <h3 class="sub-h">1.1&nbsp; Milestone 2 requirements and where each is met</h3>
+  <table class="pro">
+    <tr><th style="width:28%">Requirement</th><th>Delivered as</th><th style="width:22%">Where</th></tr>
+    <tr><td>Working Packet Tracer file</td><td>Complete HQ network: 7 network devices, 43 end devices, all configured and saved in the repaired, healthy state</td><td class="mono">tshimo-agri-hq-milestone-2.pkt</td></tr>
+    <tr><td>Assigned feature implemented</td><td>Advanced fault isolation: a VLAN pruned from a trunk, injected, diagnosed layer by layer, fixed and verified</td><td>Section 7</td></tr>
+    <tr><td>Testing evidence</td><td>12 functional tests across Layers 1–7, every one captured from the live simulation</td><td>Sections 3–6</td></tr>
+    <tr><td>Updated GitHub portfolio</td><td>Configs, screenshots, test log, troubleshooting record and this report, committed in logical steps — <a href="https://github.com/MALULEKE-KS/tshimo-agri-network" style="color:var(--navy)">github.com/MALULEKE-KS/tshimo-agri-network</a></td><td>Section 10</td></tr>
+  </table>
+
+  <h3 class="sub-h">1.2&nbsp; Device inventory</h3>
+  <table class="pro">
+    <tr><th>Device</th><th>Packet Tracer model</th><th>Role</th></tr>
+    <tr><td class="mono">ISP</td><td>Cisco 2911</td><td>Simulated provider: far end of the WAN link, loopback <code>203.0.113.1</code> as the "internet" test target</td></tr>
+    <tr><td class="mono">R1</td><td>Cisco 2911</td><td>Edge router: inter-VLAN routing (router-on-a-stick), DHCP relay, default route, NAT/PAT</td></tr>
+    <tr><td class="mono">SW-CORE</td><td>Cisco 2960-24TT</td><td>Layer 2 distribution: trunks R1 down to all four access switches</td></tr>
+    <tr><td class="mono">SW-ADM / SW-SAL / SW-WH / SW-SRV</td><td>Cisco 2960-24TT</td><td>One access switch per department; 24 ports each for physical headroom</td></tr>
+    <tr><td class="mono">ADMIN-PC-01…08</td><td>PC-PT</td><td><span class="dept-tag dept-admin">VLAN 10</span> Admin/Management users</td></tr>
+    <tr><td class="mono">SALES-PC-01…12</td><td>PC-PT</td><td><span class="dept-tag dept-sales">VLAN 20</span> Sales users</td></tr>
+    <tr><td class="mono">WH-PC-01…20</td><td>PC-PT</td><td><span class="dept-tag dept-wh">VLAN 30</span> Warehouse/Logistics users, including the 8 CR1 staff</td></tr>
+    <tr><td class="mono">DHCP-SRV / DNS-SRV / FILE-SRV</td><td>Server-PT</td><td><span class="dept-tag dept-srv">VLAN 40</span> Central DHCP, internal DNS, file and web services</td></tr>
+  </table>
+
+  <figure class="lg">
+    <div class="frame"><img src="figures/01-physical-topology.png" alt="Topology"></div>
+    <figcaption><b>Figure 1.</b> The implemented HQ topology in Packet Tracer: ISP → R1 → SW-CORE → four access switches → 40 PCs and 3 servers.</figcaption>
+  </figure>
+</div>
+
+<!-- ================= 2 PHYSICAL ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-cable"/></svg><h1>2&nbsp;&nbsp;Physical Build &amp; Cabling</h1></div><div class="sub">Section 2 of 10</div></div>
+  <p class="lead">The physical build was completed and saved as an unconfigured baseline (<code>tshimo-agri-hq-baseline.pkt</code>) before any IOS configuration, so the wiring could be checked on its own.</p>
+
+  <h3 class="sub-h">2.1&nbsp; Uplink and trunk cabling</h3>
+  <table class="pro">
+    <tr><th>Cable</th><th>From</th><th>To</th><th>Cable type</th><th>Logical role</th></tr>
+    <tr><td class="mono">C01</td><td class="mono">ISP Gi0/0</td><td class="mono">R1 Gi0/1</td><td>Crossover</td><td>Routed WAN, 10.23.1.0/30</td></tr>
+    <tr><td class="mono">C02</td><td class="mono">R1 Gi0/0</td><td class="mono">SW-CORE Gi0/1</td><td>Straight-through</td><td>802.1Q trunk (router-on-a-stick)</td></tr>
+    <tr><td class="mono">C03</td><td class="mono">SW-CORE Fa0/1</td><td class="mono">SW-ADM Fa0/1</td><td>Crossover</td><td>802.1Q trunk</td></tr>
+    <tr><td class="mono">C04</td><td class="mono">SW-CORE Fa0/2</td><td class="mono">SW-SAL Fa0/1</td><td>Crossover</td><td>802.1Q trunk</td></tr>
+    <tr><td class="mono">C05</td><td class="mono">SW-CORE Fa0/3</td><td class="mono">SW-WH Fa0/1</td><td>Crossover</td><td>802.1Q trunk</td></tr>
+    <tr><td class="mono">C06</td><td class="mono">SW-CORE Fa0/4</td><td class="mono">SW-SRV Fa0/1</td><td>Crossover</td><td>802.1Q trunk</td></tr>
+  </table>
+  <p>Cable types follow the standard rule: <b>straight-through between unlike devices</b> (router↔switch, switch↔PC/server) and <b>crossover between like devices</b> (router↔router, switch↔switch). The 2911 and 2960 support Auto-MDIX and would usually bring a wrong cable up anyway, but the build uses the textbook-correct cable so it doesn't rely on that.</p>
+
+  <h3 class="sub-h">2.2&nbsp; Endpoint ports (all straight-through)</h3>
+  <table class="pro">
+    <tr><th>Switch</th><th>Ports</th><th>Devices</th><th>VLAN</th></tr>
+    <tr><td class="mono">SW-ADM</td><td class="mono">Fa0/2 – Fa0/9</td><td>8 Admin PCs</td><td><span class="dept-tag dept-admin">10</span></td></tr>
+    <tr><td class="mono">SW-SAL</td><td class="mono">Fa0/2 – Fa0/13</td><td>12 Sales PCs</td><td><span class="dept-tag dept-sales">20</span></td></tr>
+    <tr><td class="mono">SW-WH</td><td class="mono">Fa0/2 – Fa0/21</td><td>20 Warehouse PCs (12 + 8 CR1)</td><td><span class="dept-tag dept-wh">30</span></td></tr>
+    <tr><td class="mono">SW-SRV</td><td class="mono">Fa0/2, Fa0/3, Fa0/4</td><td>DHCP-SRV, DNS-SRV, FILE-SRV</td><td><span class="dept-tag dept-srv">40</span></td></tr>
+  </table>
+
+  <figure>
+    <div class="frame"><img src="figures/01a-port-labels.png" alt="Port labels"></div>
+    <figcaption><b>Figure 2.</b> The same topology with Packet Tracer's port labels switched on. The four SW-CORE ↔ access-switch links are drawn dashed (crossover); endpoint links are solid (straight-through). The ISP–R1 link is too short at this zoom to show its dash pattern.</figcaption>
+  </figure>
+
+  <div class="note"><b class="h">Two corrections made during the build</b> — both are detailed in Section 8. (1) The original port plan put SW-CORE's four access uplinks on Gi0/2–Gi0/5, but a 2960-24TT only has two Gigabit ports, so those uplinks moved to Fa0/1–Fa0/4. (2) The five like-device links were first cabled straight-through and were recabled as crossover after a check against the rubric's "correct cabling" criterion. Neither change touched any VLAN, subnet or gateway.</div>
+</div>
+
+<!-- ================= 3 SWITCHING ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-switch"/></svg><h1>3&nbsp;&nbsp;Switching — VLANs &amp; Trunks</h1></div><div class="sub">Section 3 of 10</div></div>
+
+  <h3 class="sub-h">3.1&nbsp; VLAN and addressing plan as implemented</h3>
+  <table class="pro">
+    <tr><th>VLAN</th><th>Name</th><th>Subnet</th><th>Gateway (R1)</th><th>Where it lives</th></tr>
+    <tr><td><span class="dept-tag dept-admin">10</span></td><td>ADMIN</td><td class="mono">10.23.0.0/26</td><td class="mono">10.23.0.1</td><td>SW-ADM access ports</td></tr>
+    <tr><td><span class="dept-tag dept-sales">20</span></td><td>SALES</td><td class="mono">10.23.0.64/26</td><td class="mono">10.23.0.65</td><td>SW-SAL access ports</td></tr>
+    <tr><td><span class="dept-tag dept-wh">30</span></td><td>WAREHOUSE</td><td class="mono">10.23.0.128/26</td><td class="mono">10.23.0.129</td><td>SW-WH access ports</td></tr>
+    <tr><td><span class="dept-tag dept-srv">40</span></td><td>SERVERS</td><td class="mono">10.23.0.192/26</td><td class="mono">10.23.0.193</td><td>SW-SRV access ports</td></tr>
+    <tr><td><span class="dept-tag dept-infra">99</span></td><td>MGMT-NATIVE</td><td class="mono">10.23.1.16/28</td><td class="mono">10.23.1.17</td><td>Native VLAN on every trunk; switch management SVIs</td></tr>
+  </table>
+
+  <h3 class="sub-h">3.2&nbsp; What each switch was configured with</h3>
+  <ul class="steps">
+    <li><div><b>VLAN database.</b> SW-CORE holds all five VLANs, since every VLAN crosses it. Each access switch only creates the VLAN its ports use, plus VLAN 99.</div></li>
+    <li><div><b>Trunks.</b> Every switch-to-switch and switch-to-router link is a static 802.1Q trunk (<code>switchport mode trunk</code>) with <b>native VLAN 99</b> and an explicit allowed list of <code>10,20,30,40,99</code>. Moving the native VLAN off VLAN 1 keeps untagged traffic out of the default VLAN.</div></li>
+    <li><div><b>Access ports.</b> Each department's port range is a static access port in its VLAN, with PortFast so PCs come up without waiting for spanning tree.</div></li>
+    <li><div><b>Management.</b> Each switch has an SVI on VLAN 99 — SW-CORE <code>.18</code>, SW-ADM <code>.19</code>, SW-SAL <code>.20</code>, SW-WH <code>.21</code>, SW-SRV <code>.22</code> (all /28) — with default gateway <code>10.23.1.17</code>.</div></li>
+  </ul>
+
+  <figure>
+    <div class="frame"><img src="figures/02a-cdp-neighbors.png" alt="CDP neighbours"></div>
+    <figcaption><b>Figure 3.</b> SW-CORE <code>show cdp neighbors</code>: Fa0/1 → SW-ADM, Fa0/2 → SW-SAL, Fa0/3 → SW-WH, Fa0/4 → SW-SRV, each on the neighbour's Fa0/1 — the port map confirmed from the switch itself. The native-VLAN-mismatch messages above it were logged while the switches were configured one at a time; each cleared ("Port consistency restored") once both ends of a trunk had native VLAN 99. R1 isn't listed yet because it was configured afterwards.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-switch"/></svg><h1>3&nbsp;&nbsp;Switching — Evidence</h1></div><div class="sub">Section 3 of 10</div></div>
+  <figure>
+    <div class="frame"><img src="figures/03-trunks.png" alt="Trunks"></div>
+    <figcaption><b>Figure 4.</b> SW-CORE <code>show interfaces trunk</code>: Fa0/1–Fa0/4 all trunking, 802.1Q, native VLAN 99, allowed <code>10,20,30,40,99</code>. (Gi0/1 to R1 came up once R1 was configured — see Figure 17.)</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="figures/02-vlans.png" alt="VLAN brief"></div>
+    <figcaption><b>Figure 5.</b> SW-WH <code>show vlan brief</code>: VLAN 30 WAREHOUSE holds exactly 20 access ports, Fa0/2–Fa0/21 — the 12 original Warehouse staff plus the 8 added by Change Request 1.</figcaption>
+  </figure>
+</div>
+
+<!-- ================= 4 ROUTING ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-router"/></svg><h1>4&nbsp;&nbsp;Routing, WAN &amp; NAT</h1></div><div class="sub">Section 4 of 10</div></div>
+
+  <h3 class="sub-h">4.1&nbsp; Router-on-a-stick on R1</h3>
+  <p>The switches are Layer 2 only, so R1 is the single point where traffic moves between VLANs. Its Gi0/0 carries no IP address; instead it has one 802.1Q subinterface per VLAN, and each subinterface's address is that VLAN's default gateway.</p>
+  <table class="pro">
+    <tr><th>Subinterface</th><th>Encapsulation</th><th>IP address</th><th>DHCP relay</th><th>NAT</th></tr>
+    <tr><td class="mono">Gi0/0.10</td><td class="mono">dot1Q 10</td><td class="mono">10.23.0.1/26</td><td class="mono">10.23.0.194</td><td>inside</td></tr>
+    <tr><td class="mono">Gi0/0.20</td><td class="mono">dot1Q 20</td><td class="mono">10.23.0.65/26</td><td class="mono">10.23.0.194</td><td>inside</td></tr>
+    <tr><td class="mono">Gi0/0.30</td><td class="mono">dot1Q 30</td><td class="mono">10.23.0.129/26</td><td class="mono">10.23.0.194</td><td>inside</td></tr>
+    <tr><td class="mono">Gi0/0.40</td><td class="mono">dot1Q 40</td><td class="mono">10.23.0.193/26</td><td>— (servers are static)</td><td>inside</td></tr>
+    <tr><td class="mono">Gi0/0.99</td><td class="mono">dot1Q 99 native</td><td class="mono">10.23.1.17/28</td><td>—</td><td>—</td></tr>
+    <tr><td class="mono">Gi0/1</td><td>— (WAN)</td><td class="mono">10.23.1.1/30</td><td>—</td><td>outside</td></tr>
+  </table>
+  <p><code>encapsulation dot1Q 99 native</code> matches the switches' native VLAN, so untagged management frames on the trunk land in the right subinterface.</p>
+
+  <h3 class="sub-h">4.2&nbsp; Default route and NAT/PAT</h3>
+  <ul class="steps">
+    <li><div><b>Default route:</b> <code>ip route 0.0.0.0 0.0.0.0 10.23.1.2</code> sends everything not local to the ISP.</div></li>
+    <li><div><b>NAT/PAT overload:</b> <code>access-list 1 permit 10.23.0.0 0.0.0.255</code> + <code>ip nat inside source list 1 interface Gi0/1 overload</code>. Every user and server address shares R1's WAN address <code>10.23.1.1</code>, told apart by port number.</div></li>
+    <li><div><b>Deliberately excluded:</b> the ACL only matches <code>10.23.0.0/24</code>. The WAN and management ranges (<code>10.23.1.0/24</code>) are never translated, so infrastructure traffic keeps its real addresses.</div></li>
+    <li><div><b>ISP side:</b> Gi0/0 <code>10.23.1.2/30</code> and Loopback0 <code>203.0.113.1/32</code> (a documentation-range address used as the "internet" test target). The ISP needs no route back to the LAN: it only ever sees R1's translated address, which is directly connected.</div></li>
+  </ul>
+
+  <figure class="sm">
+    <div class="frame"><img src="figures/04-r1-interfaces.png" alt="R1 interfaces"></div>
+    <figcaption><b>Figure 6.</b> R1 <code>show ip interface brief</code>: all five VLAN subinterfaces and the WAN link are up/up with their planned addresses. (Gi0/2 is unused and stays shut.)</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-router"/></svg><h1>4&nbsp;&nbsp;Routing — Evidence</h1></div><div class="sub">Section 4 of 10</div></div>
+  <figure class="lg">
+    <div class="frame"><img src="figures/05-r1-routes.png" alt="R1 routes"></div>
+    <figcaption><b>Figure 7.</b> R1 <code>show ip route</code>: a connected (C) and local (L) route for every VLAN and for the WAN /30, and "Gateway of last resort is 10.23.1.2" confirming the default route. The "% Invalid input" line is a typo (<code>how ip route</code>) corrected on the next line.</figcaption>
+  </figure>
+</div>
+
+<!-- ================= 5 SERVICES ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-server"/></svg><h1>5&nbsp;&nbsp;Network Services</h1></div><div class="sub">Section 5 of 10</div></div>
+
+  <h3 class="sub-h">5.1&nbsp; Server addressing (static, VLAN 40)</h3>
+  <table class="pro">
+    <tr><th>Server</th><th>IP / mask</th><th>Gateway</th><th>DNS</th><th>Service enabled</th></tr>
+    <tr><td class="mono">DHCP-SRV</td><td class="mono">10.23.0.194/26</td><td class="mono">10.23.0.193</td><td class="mono">10.23.0.195</td><td>DHCP (pools below)</td></tr>
+    <tr><td class="mono">DNS-SRV</td><td class="mono">10.23.0.195/26</td><td class="mono">10.23.0.193</td><td class="mono">10.23.0.195</td><td>DNS — A record <code>files.tshimo.test → 10.23.0.196</code></td></tr>
+    <tr><td class="mono">FILE-SRV</td><td class="mono">10.23.0.196/26</td><td class="mono">10.23.0.193</td><td class="mono">10.23.0.195</td><td>HTTP and FTP</td></tr>
+  </table>
+
+  <h3 class="sub-h">5.2&nbsp; Central DHCP with relay</h3>
+  <table class="pro">
+    <tr><th>Pool</th><th>Default gateway</th><th>DNS</th><th>Start address</th><th>Mask</th><th>Max users</th></tr>
+    <tr><td class="mono">ADMIN-POOL</td><td class="mono">10.23.0.1</td><td class="mono">10.23.0.195</td><td class="mono">10.23.0.10</td><td class="mono">255.255.255.192</td><td>50</td></tr>
+    <tr><td class="mono">SALES-POOL</td><td class="mono">10.23.0.65</td><td class="mono">10.23.0.195</td><td class="mono">10.23.0.74</td><td class="mono">255.255.255.192</td><td>50</td></tr>
+    <tr><td class="mono">WH-POOL</td><td class="mono">10.23.0.129</td><td class="mono">10.23.0.195</td><td class="mono">10.23.0.138</td><td class="mono">255.255.255.192</td><td>50</td></tr>
+    <tr><td class="mono">serverPool</td><td class="mono">10.23.0.193</td><td class="mono">10.23.0.195</td><td class="mono">10.23.0.200</td><td class="mono">255.255.255.192</td><td>20</td></tr>
+  </table>
+  <p>A PC's DHCP request is a broadcast and never leaves its own VLAN. R1's <code>ip helper-address 10.23.0.194</code> on each user subinterface picks it up and forwards it to DHCP-SRV as unicast, stamped with the subinterface's gateway address. The server uses that gateway to choose the matching pool. Each pool starts nine addresses above its gateway, which keeps <code>.1–.9</code> of every /26 free for infrastructure. All 40 user PCs were set to DHCP. Leases were checked on one PC per department (Figure 8), and three more PCs were used successfully in later tests.</p>
+
+  <div class="fig-row">
+    <figure><div class="frame"><img src="figures/06b-sales-dhcp.png" alt="Sales DHCP"></div><figcaption><b>Figure 8b.</b> SALES-PC-01: <code>10.23.0.74/26</code>, gateway <code>.65</code> — first SALES-POOL lease.</figcaption></figure>
+    <figure><div class="frame"><img src="figures/06c-warehouse-dhcp.png" alt="Warehouse DHCP"></div><figcaption><b>Figure 8c.</b> WH-PC-01: <code>10.23.0.138/26</code>, gateway <code>.129</code> — first WH-POOL lease.</figcaption></figure>
+  </div>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-server"/></svg><h1>5&nbsp;&nbsp;Services — Evidence</h1></div><div class="sub">Section 5 of 10</div></div>
+  <figure class="lg">
+    <div class="frame"><img src="figures/06a-admin-dhcp.png" alt="Admin DHCP"></div>
+    <figcaption><b>Figure 8a.</b> ADMIN-PC-01 <code>ipconfig /all</code>: <code>10.23.0.10/26</code>, gateway <code>10.23.0.1</code>, DHCP server <code>10.23.0.194</code>, DNS <code>10.23.0.195</code>. The ping that follows (VLAN 10 → file server in VLAN 40) gets 3 of 4 replies; the first is lost while ARP resolves, which is normal.</figcaption>
+  </figure>
+  <figure class="sm">
+    <div class="frame"><img src="figures/09-dns-http-test.png" alt="DNS and HTTP"></div>
+    <figcaption><b>Figure 9.</b> ADMIN-PC-04's web browser opening <code>http://files.tshimo.test</code>: the name resolves via DNS-SRV, and FILE-SRV serves the page.</figcaption>
+  </figure>
+</div>
+
+<!-- ================= 6 TESTING ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-check"/></svg><h1>6&nbsp;&nbsp;Testing &amp; Evidence</h1></div><div class="sub">Section 6 of 10</div></div>
+  <p class="lead">Every test was run live in Packet Tracer against the configured network. Observed results come only from what the simulation showed.</p>
+  <table class="pro">
+    <tr><th style="width:9%">ID</th><th style="width:30%">Test</th><th>Observed</th><th style="width:8%">Result</th><th style="width:8%">Fig.</th></tr>
+    <tr><td class="mono">PHY-01</td><td>Topology and cabling</td><td>All 7 network devices, 43 end devices and 49 links present; crossover on like-device links</td><td><span class="pass">PASS</span></td><td>1, 2</td></tr>
+    <tr><td class="mono">L2-00</td><td>SW-CORE <code>show cdp neighbors</code></td><td>Fa0/1–Fa0/4 → SW-ADM, SW-SAL, SW-WH, SW-SRV as planned</td><td><span class="pass">PASS</span></td><td>3</td></tr>
+    <tr><td class="mono">L2-01</td><td>SW-WH <code>show vlan brief</code></td><td>VLAN 30 active on Fa0/2–Fa0/21</td><td><span class="pass">PASS</span></td><td>5</td></tr>
+    <tr><td class="mono">L2-02</td><td>SW-CORE <code>show interfaces trunk</code></td><td>All trunks: 802.1Q, native 99, allowed 10,20,30,40,99</td><td><span class="pass">PASS</span></td><td>4</td></tr>
+    <tr><td class="mono">L3-01</td><td>R1 <code>show ip interface brief</code></td><td>5 subinterfaces + Gi0/1 up/up with planned addresses</td><td><span class="pass">PASS</span></td><td>6</td></tr>
+    <tr><td class="mono">L3-02</td><td>R1 <code>show ip route</code></td><td>All VLAN and WAN routes connected; default via 10.23.1.2</td><td><span class="pass">PASS</span></td><td>7</td></tr>
+    <tr><td class="mono">DHCP-01</td><td>One PC per user VLAN, <code>ipconfig /all</code></td><td>Each got the first address of its own pool, correct gateway and DNS</td><td><span class="pass">PASS</span></td><td>8a–c</td></tr>
+    <tr><td class="mono">LAN-01</td><td>WH-PC-01 → WH-PC-02 (same VLAN)</td><td>4/4 replies</td><td><span class="pass">PASS</span></td><td>10</td></tr>
+    <tr><td class="mono">ROUTE-01</td><td>Admin and Sales → FILE-SRV (across VLANs)</td><td>ADMIN-PC-01 3/4 (first lost to ARP), SALES-PC-01 4/4</td><td><span class="pass">PASS</span></td><td>8a, 11</td></tr>
+    <tr><td class="mono">DNS-01</td><td>Browser → <code>files.tshimo.test</code></td><td>Name resolved, page loaded</td><td><span class="pass">PASS</span></td><td>9</td></tr>
+    <tr><td class="mono">NAT-01</td><td>PC → <code>203.0.113.1</code> through NAT</td><td>SALES-PC-03 4/4 replies, 0% loss</td><td><span class="pass">PASS</span></td><td>12, 13</td></tr>
+    <tr><td class="mono">CR1-01</td><td>Warehouse capacity after CR1</td><td>20 ports in VLAN 30, no subnet, gateway or trunk change</td><td><span class="pass">PASS</span></td><td>5</td></tr>
+  </table>
+  <p style="font-size:11.2px;color:var(--muted)">ROUTE-01 note: Warehouse's own path to the file server is demonstrated in Section 7 (Figure 14, healthy baseline: 4/4).</p>
+
+  <div class="fig-row">
+    <figure><div class="frame"><img src="figures/07-same-vlan-ping.png" alt="Same VLAN"></div><figcaption><b>Figure 10.</b> WH-PC-01 → WH-PC-02 (<code>10.23.0.139</code>), same VLAN: 4/4.</figcaption></figure>
+    <figure><div class="frame"><img src="figures/10a-nat-ping.png" alt="NAT ping"></div><figcaption><b>Figure 12.</b> SALES-PC-03 → <code>203.0.113.1</code> (ISP loopback) through NAT: 4/4, 0% loss.</figcaption></figure>
+  </div>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-check"/></svg><h1>6&nbsp;&nbsp;Testing — Evidence</h1></div><div class="sub">Section 6 of 10</div></div>
+  <figure>
+    <div class="frame"><img src="figures/08-inter-vlan-ping-sales.png" alt="Inter-VLAN"></div>
+    <figcaption><b>Figure 11.</b> SALES-PC-01 (VLAN 20, <code>10.23.0.74</code>) → FILE-SRV (VLAN 40, <code>10.23.0.196</code>): 4/4. TTL 127 instead of 128 shows the packet crossed one router hop (R1).</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="figures/10b-nat-translations.png" alt="NAT translations"></div>
+    <figcaption><b>Figure 13.</b> R1's NAT configuration as applied, followed by <code>show ip nat translations</code>. The table is empty because it was checked about six minutes after the NAT ping, and dynamic PAT entries expire after a short idle time. The successful ping in Figure 12 is the evidence that translation worked: an untranslated <code>10.23.0.x</code> source could not have got a reply back from the ISP.</figcaption>
+  </figure>
+</div>
+
+<!-- ================= 7 FAULT ISOLATION ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-search"/></svg><h1>7&nbsp;&nbsp;Advanced Fault Isolation</h1></div><div class="sub">Section 7 of 10 &middot; Assigned challenge</div></div>
+
+  <h3 class="sub-h">7.1&nbsp; The scenario</h3>
+  <p>A change on the core switch removes VLAN 30 (Warehouse) from the allowed-VLAN list on the SW-CORE → SW-WH trunk. It's a realistic one-word mistake: typing <code>switchport trunk allowed vlan 10,20,40,99</code> instead of <code>…10,20,30,40,99</code>, or running <code>remove 30</code> on the wrong port.</p>
+  <p><b>Why it qualifies as Advanced:</b></p>
+  <ul class="steps">
+    <li><div>The physical link stays up. Link lights and Layer 1 checks look healthy, so the fault can't be seen on the topology.</div></li>
+    <li><div>The failure is partial. Warehouse PCs can still reach each other, which can mislead a troubleshooter into blaming the gateway, DHCP or the PCs.</div></li>
+    <li><div>The two ends of the trunk disagree: SW-WH still allows VLAN 30 and SW-CORE doesn't. Checking only one end misses it.</div></li>
+    <li><div>It's a one-line mistake with a one-line fix. Finding it depends on method, not on rebuilding anything.</div></li>
+  </ul>
+
+  <h3 class="sub-h">7.2&nbsp; Method</h3>
+  <p>Work up the OSI model and only move up a layer once the one below is proven good. Use a <b>control test</b> from an unaffected department to scope the fault before touching any device. Treat expected symptoms as hypotheses to check, not conclusions.</p>
+
+  <h3 class="sub-h">7.3&nbsp; Step 1 — Healthy baseline</h3>
+  <figure>
+    <div class="frame"><img src="figures/12-fault-baseline.png" alt="Baseline"></div>
+    <figcaption><b>Figure 14.</b> Before the fault, WH-PC-01 (<code>10.23.0.138</code>) reaches WH-PC-02 (<code>.139</code>), its gateway (<code>.129</code>) and FILE-SRV (<code>.196</code>): all 4/4. The Packet Tracer file was saved at this point.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-alert"/></svg><h1>7&nbsp;&nbsp;Fault — Injection &amp; Symptoms</h1></div><div class="sub">Section 7 of 10</div></div>
+
+  <h3 class="sub-h">7.4&nbsp; Step 2 — Inject the fault (on SW-CORE, not saved)</h3>
+  <div class="cmd">configure terminal
+interface fastEthernet0/3
+ switchport trunk allowed vlan remove 30
+end           <span class="c">! no write memory — the fault is never saved</span></div>
+
+  <h3 class="sub-h">7.5&nbsp; Step 3 — Observe the symptoms</h3>
+  <table class="pro">
+    <tr><th>Test</th><th>Expected (hypothesis)</th><th>Observed</th></tr>
+    <tr><td>WH-PC-01 → gateway <code>.129</code></td><td>Fail: path to R1 crosses the trunk</td><td><span class="fail">100% loss</span></td></tr>
+    <tr><td>WH-PC-01 → FILE-SRV <code>.196</code></td><td>Fail: another VLAN, needs R1</td><td><span class="fail">100% loss</span></td></tr>
+    <tr><td>WH-PC-01 → WH-PC-02 <code>.139</code></td><td>Work: same switch, same VLAN, no trunk needed</td><td><span class="pass">4/4</span></td></tr>
+    <tr><td>ADMIN-PC-01 → FILE-SRV (control)</td><td>Work: Admin uses Fa0/1, not Fa0/3</td><td><span class="pass">4/4</span></td></tr>
+  </table>
+
+  <div class="fig-row">
+    <figure><div class="frame"><img src="figures/13a-fault-symptoms-wh.png" alt="WH symptoms"></div><figcaption><b>Figure 15.</b> WH-PC-01 during the fault: gateway (<code>.129</code>) and file server (<code>.196</code>) fail; WH-PC-02 (<code>.139</code>) still answers.</figcaption></figure>
+    <figure><div class="frame"><img src="figures/13b-fault-symptoms-admin-control.png" alt="Admin control"></div><figcaption><b>Figure 16.</b> ADMIN-PC-01 control test during the same fault: FILE-SRV answers 4/4, 0% loss.</figcaption></figure>
+  </div>
+
+  <div class="note info"><b class="h">What the two results prove together.</b> The control test passes and Warehouse fails, so the fault is scoped to <b>Warehouse only</b>. Everything Admin depends on (R1, SW-CORE's other ports, SW-SRV, the file server) is working. What's left to suspect is the path that only Warehouse uses: SW-WH and its uplink to SW-CORE.</div>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-search"/></svg><h1>7&nbsp;&nbsp;Fault — Isolation &amp; Root Cause</h1></div><div class="sub">Section 7 of 10</div></div>
+
+  <h3 class="sub-h">7.6&nbsp; Step 4 — Isolate layer by layer</h3>
+  <table class="pro">
+    <tr><th style="width:16%">Layer</th><th style="width:34%">Evidence</th><th>Conclusion</th></tr>
+    <tr><td>Scope</td><td>Admin works; Warehouse PCs reach each other</td><td>R1, the servers and SW-WH's access ports are fine. The problem lies on the path between SW-WH and R1.</td></tr>
+    <tr><td>1 — Physical</td><td>Link lights up; WH-PC-01 ↔ WH-PC-02 works</td><td>Cables and ports are fine.</td></tr>
+    <tr><td>3 — Network</td><td>WH-PC-01 still holds its DHCP lease <code>10.23.0.138/26</code>, gateway <code>.129</code>; R1's Gi0/0.30 was up/up before the change</td><td>Not an addressing or gateway fault.</td></tr>
+    <tr><td>2 — Data link</td><td>SW-CORE <code>show interfaces trunk</code> (Figure 17)</td><td>All five trunk ports up, native 99. Fa0/3's allowed list reads <code>10,20,40,99</code>; every other port reads <code>10,20,30,40,99</code>. <b>Fault found.</b></td></tr>
+  </table>
+
+  <div class="note"><b class="h">Root cause.</b> SW-CORE Fa0/3 is the only physical path between SW-WH and the rest of the network. With VLAN 30 removed from that trunk's allowed list, no VLAN 30 frame can cross it. Warehouse PCs can still switch locally, but they lose everything that depends on reaching R1. Mode, encapsulation and native VLAN are all correct, so the fault is purely the trunk's VLAN membership.</div>
+
+  <figure>
+    <div class="frame"><img src="figures/14-fault-isolation-trunk.png" alt="Isolation" style="max-height:118mm"></div>
+    <figcaption><b>Figure 17.</b> The key evidence. The injection command (repeated three times, which changes nothing extra), then SW-CORE <code>show interfaces trunk</code>: Fa0/3 alone is missing VLAN 30 across all three allowed/active/forwarding lists. Gi0/1 to R1 is trunking normally.</figcaption>
+  </figure>
+</div>
+
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-check"/></svg><h1>7&nbsp;&nbsp;Fault — Fix &amp; Verification</h1></div><div class="sub">Section 7 of 10</div></div>
+
+  <h3 class="sub-h">7.7&nbsp; Step 5 — Apply the smallest fix (and save it)</h3>
+  <div class="cmd">configure terminal
+interface fastEthernet0/3
+ switchport trunk allowed vlan add 30
+end
+write memory  <span class="c">! [OK] — the fix is saved; the fault never was</span></div>
+  <p><code>add 30</code> restores exactly the one VLAN that was removed, without retyping, and so without risking, the rest of the list.</p>
+
+  <h3 class="sub-h">7.8&nbsp; Step 6 — Verify by repeating the failed tests</h3>
+  <table class="pro">
+    <tr><th>Check</th><th>Expected</th><th>Observed</th></tr>
+    <tr><td>SW-CORE <code>show interfaces trunk</code></td><td>Fa0/3 allows 10,20,30,40,99, same as the others</td><td><span class="pass">PASS</span> Fa0/3 back to <code>10,20,30,40,99</code></td></tr>
+    <tr><td>WH-PC-01 → gateway <code>.129</code></td><td>Replies</td><td><span class="pass">4/4</span></td></tr>
+    <tr><td>WH-PC-01 → FILE-SRV <code>.196</code></td><td>Replies</td><td><span class="pass">4/4</span></td></tr>
+  </table>
+
+  <figure>
+    <div class="frame"><img src="figures/15-fault-fixed.png" alt="Fixed"></div>
+    <figcaption><b>Figure 18.</b> After the fix: WH-PC-01 reaches its gateway (<code>.129</code>) and FILE-SRV (<code>.196</code>) again, 4/4 each, 0% loss.</figcaption>
+  </figure>
+
+  <div class="note ok"><b class="h">Final state.</b> The submitted <code>tshimo-agri-hq-milestone-2.pkt</code> was saved after the fix, with <code>write memory</code> run on SW-CORE. It contains the healthy, repaired network, not the faulted one. The complete working record is in <code>troubleshooting/advanced-fault-isolation.md</code>.</div>
+</div>
+
+<!-- ================= 8 ISSUES ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-alert"/></svg><h1>8&nbsp;&nbsp;Issues Encountered &amp; Resolutions</h1></div><div class="sub">Section 8 of 10</div></div>
+  <p class="lead">These are the real problems hit during implementation, recorded as they happened rather than tidied away.</p>
+  <table class="pro">
+    <tr><th style="width:22%">Issue</th><th style="width:26%">How it was detected</th><th style="width:26%">Resolution</th><th>What it shows</th></tr>
+    <tr><td>Core port plan used Gi0/2–Gi0/5 on SW-CORE</td><td>Checking the plan against the 2960-24TT's actual ports before building: it has only two Gigabit ports</td><td>Access uplinks moved to Fa0/1–Fa0/4; R1 kept Gi0/1</td><td>Port-only change; the VLAN and addressing design was untouched</td></tr>
+    <tr><td>Like-device links cabled straight-through</td><td>Reviewing the build against the rubric's "correct cabling" criterion</td><td>ISP–R1 and the four SW-CORE uplinks recabled as crossover; baseline resaved</td><td>Correct cabling no longer depends on Auto-MDIX</td></tr>
+    <tr><td>Native-VLAN-mismatch and spanning-tree "inconsistent VLAN" messages</td><td>Console logs on SW-CORE while the switches were configured one at a time</td><td>None needed: each cleared once both ends of the trunk had native VLAN 99</td><td>A trunk's two ends must agree on its native VLAN</td></tr>
+    <tr><td>Empty NAT translation table</td><td><code>show ip nat translations</code> run minutes after a successful NAT ping</td><td>None needed: PAT entries time out when idle; the successful ping is the proof</td><td>Check translations immediately after generating traffic</td></tr>
+    <tr><td>Wrong config pasted onto the core switch during the fault demo</td><td>The Admin control test failed three times in a row (25%, then 100%, then 100% loss), and the core switch's prompt read <code>SW-WH#</code>. <code>show cdp neighbors</code> showed 5 neighbours, so it was physically the core switch. The access-port block from <code>sw-wh.txt</code> had turned three of its trunks (to SW-SAL, SW-WH and SW-SRV) into VLAN 30 access ports, which cut the path to the file server for every department.</td><td>Re-applied <code>sw-core.txt</code> in full, confirmed all trunks with <code>show interfaces trunk</code>, saved, then re-injected only the intended one-line fault and re-ran every symptom test</td><td>Using CDP to confirm a device's identity, and refusing to accept a symptom that didn't fit the design</td></tr>
+  </table>
+  <div class="note info"><b class="h">Why the last one matters.</b> The first symptom test didn't match the prediction: Admin failed too. Instead of recording it as the result, the mismatch was treated as a second, unknown problem and run down. The symptoms in Section 7 all come from the clean rerun. Recording an unexpected result honestly, then explaining it, is the troubleshooting skill this challenge is about.</div>
+</div>
+
+<!-- ================= 9 CR1 / GROWTH ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-route"/></svg><h1>9&nbsp;&nbsp;Change Request &amp; Growth Readiness</h1></div><div class="sub">Section 9 of 10</div></div>
+  <h3 class="sub-h">9.1&nbsp; Change Request 1 — implemented on the live network</h3>
+  <table class="pro">
+    <tr><th>Item</th><th>Before CR1</th><th>After CR1 (as built)</th><th>Changed?</th></tr>
+    <tr><td>Warehouse staff / PCs</td><td>12</td><td>20 (WH-PC-01…20)</td><td>Yes — endpoints only</td></tr>
+    <tr><td>SW-WH access ports in VLAN 30</td><td>Fa0/2–Fa0/13</td><td>Fa0/2–Fa0/21</td><td>Yes — port range only</td></tr>
+    <tr><td>VLAN 30 subnet</td><td class="mono">10.23.0.128/26</td><td class="mono">10.23.0.128/26</td><td>No</td></tr>
+    <tr><td>Gateway / R1 subinterface</td><td class="mono">10.23.0.129, Gi0/0.30</td><td class="mono">10.23.0.129, Gi0/0.30</td><td>No</td></tr>
+    <tr><td>Trunks, routing, NAT</td><td>—</td><td>—</td><td>No</td></tr>
+    <tr><td>DHCP WH-POOL</td><td>50 leases</td><td>50 leases (20 used)</td><td>No</td></tr>
+  </table>
+  <p>CR1 added eight people without any redesign. The /26 already had room for 62 hosts, and the 24-port SW-WH already had the ports. Figure 5 shows the 20 Warehouse ports live in VLAN 30.</p>
+
+  <h3 class="sub-h">9.2&nbsp; Branch office — still ready</h3>
+  <p>Nothing built in Milestone 2 uses any address in <code>10.23.128.0/17</code>, which stays reserved for the branch. All HQ addresses, including the WAN /30 and management /28, sit inside <code>10.23.0.0/23</code>, so HQ can still be advertised to a branch as a single summary route. The NAT ACL and the ISP configuration also leave that space untouched.</p>
+</div>
+
+<!-- ================= 10 GITHUB ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-git"/></svg><h1>10&nbsp;&nbsp;GitHub Portfolio</h1></div><div class="sub">Section 10 of 10</div></div>
+  <p class="lead">Repository: <b>tshimo-agri-network</b> — <a href="https://github.com/MALULEKE-KS/tshimo-agri-network" style="color:var(--navy);font-weight:600">https://github.com/MALULEKE-KS/tshimo-agri-network</a></p>
+  <div class="tree">tshimo-agri-network/
+  <span class="f">README.md</span>                          <span class="c">overview, milestone status, document index</span>
+  <span class="d">docs/</span>                              <span class="c">living design and implementation record</span>
+    <span class="f">01–05</span>                            <span class="c">Milestone 1 design (requirements → change requests)</span>
+    <span class="f">06-project-status-and-milestone-2-control.md</span>
+    <span class="f">07-physical-build-design.md</span>       <span class="c">cable schedule, Gate B record</span>
+    <span class="f">08-milestone-2-execution-map.md</span>
+    <span class="f">09-packet-tracer-build-walkthrough.md</span>
+    <span class="f">10-test-results.md</span>               <span class="c">the 12-test log</span>
+  <span class="d">configs/</span>                           <span class="c">IOS command file per device + server setup</span>
+  <span class="d">packet-tracer/</span>                     <span class="c">baseline (unconfigured) and milestone-2 (final) .pkt</span>
+  <span class="d">screenshots/</span>                       <span class="c">20 evidence captures, numbered by test</span>
+  <span class="d">troubleshooting/</span>                   <span class="c">advanced-fault-isolation.md</span>
+  <span class="d">submissions/</span>
+    <span class="d">milestone-1/</span>                     <span class="c">frozen M1 package</span>
+    <span class="d">milestone-2/</span>                     <span class="c">frozen M2 package: this report + .pkt</span></div>
+
+  <h3 class="sub-h">10.1&nbsp; Milestone 2 commit history</h3>
+  <table class="pro">
+    <tr><th>Commit</th><th>What it added</th></tr>
+    <tr><td>Add Milestone 2 execution map and Packet Tracer build walkthrough</td><td>Phase plan, rubric map, build guide, repository hygiene</td></tr>
+    <tr><td>Draft IOS configurations for switches, R1 and ISP, plus server setup</td><td>All device command files, written and reviewed before being applied</td></tr>
+    <tr><td>Add baseline Packet Tracer topology and physical build evidence</td><td>Unconfigured build, topology screenshots, Gate B record</td></tr>
+    <tr><td>Milestone 2 implementation, testing and fault-isolation evidence</td><td>Configured network, 20 screenshots, test log, troubleshooting record, this report</td></tr>
+  </table>
+</div>
+
+<!-- ================= SIGN-OFF ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-flag"/></svg><h1>Milestone Tracker &amp; Sign-Off</h1></div><div class="sub">Tshimo Agri Supplies &middot; Network Implementation</div></div>
+  <div class="kicker" style="color:var(--navy)">Project timeline</div>
+  <div class="milestone-track">
+    <div class="m-row"><div class="m-dot m-done"></div><div class="label">Commencement</div><div class="date">14 Aug 2026</div><div class="status st-done">Complete</div></div>
+    <div class="m-row"><div class="m-dot m-done"></div><div class="label">Milestone 1 — Design Review</div><div class="date">28 Aug 2026</div><div class="status st-done">Design package complete</div></div>
+    <div class="m-row"><div class="m-dot m-done"></div><div class="label">Milestone 2 — Implementation Review</div><div class="date">2 Oct 2026</div><div class="status st-done">Built, tested, fault demonstrated</div></div>
+    <div class="m-row"><div class="m-dot m-pending"></div><div class="label">Final Submission</div><div class="date">16 Oct 2026</div><div class="status st-pending">Technical report &amp; video to follow</div></div>
+  </div>
+
+  <div class="sign-box">
+    <div class="kicker" style="color:var(--navy)">Declaration</div>
+    <p style="font-size:12px; color:var(--muted); margin-top:8px; line-height:1.7;">
+      I declare that this implementation and its accompanying documentation are my own work, produced for CMPG 325 at North-West University, Mahikeng campus, in accordance with the NWU AI Policy. I built and configured the network in Cisco Packet Tracer, ran every test and captured every screenshot shown in this document, and I understand and can defend every configuration and troubleshooting step described here.
+    </p>
+    <div style="display:flex; gap:60px; margin-top:10px; align-items:flex-end;">
+      <div style="flex:1"><div class="sign-line"></div><div style="font-size:11px; color:var(--muted)">Signature — Kurhula Success Maluleke</div></div>
+      <div><div class="sign-line" style="width:150px; font-size:13px; font-weight:600; color:var(--ink); padding-bottom:4px;">2 October 2026</div><div style="font-size:11px; color:var(--muted)">Date</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APPENDIX ================= -->
+<div class="section">
+  <div class="bar"><div class="icon-wrap"><svg><use href="#i-code"/></svg><h1>Appendix — Device Configurations</h1></div><div class="sub">As applied in Packet Tracer</div></div>
+  <p class="lead">These are the exact command files pasted into each device's CLI, reproduced from <code>configs/</code>. Lines starting with <code>!</code> are comments that IOS ignores. Server settings are made in Packet Tracer's GUI and are given in Section 5.</p>
+<div class="cfg-cols">
+<div class="cfg"><div class="cfg-head">SW-CORE — configs/sw-core.txt</div><pre>! ============================================================
+! SW-CORE — Tshimo Agri Supplies HQ — Layer 2 distribution switch
+! Cisco 2960-24TT
+! Role: trunks R1 (Gi0/1) down to the four access switches (Fa0/1-4).
+!       Holds the full VLAN database since every VLAN passes through here.
+! Paste this block into SW-CORE&#x27;s CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-CORE
+no ip domain-lookup
+
+! --- VLAN database ---
+vlan 10
+ name ADMIN
+vlan 20
+ name SALES
+vlan 30
+ name WAREHOUSE
+vlan 40
+ name SERVERS
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to R1 (802.1Q trunk, native VLAN 99) ---
+interface gigabitEthernet0/1
+ description Uplink to R1 Gi0/0
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Trunks to the four access switches ---
+interface range fastEthernet0/1 - 4
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+interface fastEthernet0/1
+ description Trunk to SW-ADM Fa0/1
+exit
+interface fastEthernet0/2
+ description Trunk to SW-SAL Fa0/1
+exit
+interface fastEthernet0/3
+ description Trunk to SW-WH Fa0/1
+exit
+interface fastEthernet0/4
+ description Trunk to SW-SRV Fa0/1
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.18 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! ------------------------------------------------------------
+! If Packet Tracer&#x27;s 2960 rejects &quot;switchport mode trunk&quot; with an
+! encapsulation error, add this line before it on each trunk interface:
+!   switchport trunk encapsulation dot1q
+! (Not expected on a real 2960-24TT — it&#x27;s 802.1Q-only — but PT model
+! behaviour can vary; report the exact error if you see one.)
+! ------------------------------------------------------------
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief</pre></div>
+<div class="cfg"><div class="cfg-head">SW-ADM — configs/sw-adm.txt</div><pre>! ============================================================
+! SW-ADM — Tshimo Agri Supplies HQ — Admin access switch
+! Cisco 2960-24TT
+! Role: 8 Admin PCs on VLAN 10, trunked back to SW-CORE Fa0/1.
+! Paste this block into SW-ADM&#x27;s CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-ADM
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 10
+ name ADMIN
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: 8 Admin PCs ---
+interface range fastEthernet0/2 - 9
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.19 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief</pre></div>
+<div class="cfg"><div class="cfg-head">SW-SAL — configs/sw-sal.txt</div><pre>! ============================================================
+! SW-SAL — Tshimo Agri Supplies HQ — Sales access switch
+! Cisco 2960-24TT
+! Role: 12 Sales PCs on VLAN 20, trunked back to SW-CORE Fa0/2.
+! Paste this block into SW-SAL&#x27;s CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-SAL
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 20
+ name SALES
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/2
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: 12 Sales PCs ---
+interface range fastEthernet0/2 - 13
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.20 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief</pre></div>
+<div class="cfg"><div class="cfg-head">SW-WH — configs/sw-wh.txt</div><pre>! ============================================================
+! SW-WH — Tshimo Agri Supplies HQ — Warehouse access switch
+! Cisco 2960-24TT
+! Role: 20 Warehouse PCs (12 existing + 8 CR1) on VLAN 30,
+!       trunked back to SW-CORE Fa0/3.
+! Paste this block into SW-WH&#x27;s CLI after Gate B (physical build) passes.
+!
+! NOTE: SW-CORE&#x27;s Fa0/3 is the trunk port used for the assigned
+! troubleshooting fault (VLAN 30 removed from its allowed list).
+! This file configures the healthy baseline only — the fault is
+! injected later, on SW-CORE, per troubleshooting/advanced-fault-isolation.md.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-WH
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 30
+ name WAREHOUSE
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/3
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: 20 Warehouse PCs (includes CR1 growth) ---
+interface range fastEthernet0/2 - 21
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.21 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief</pre></div>
+<div class="cfg"><div class="cfg-head">SW-SRV — configs/sw-srv.txt</div><pre>! ============================================================
+! SW-SRV — Tshimo Agri Supplies HQ — Server access switch
+! Cisco 2960-24TT
+! Role: DHCP-SRV, DNS-SRV, FILE-SRV on VLAN 40, trunked back to SW-CORE Fa0/4.
+! Paste this block into SW-SRV&#x27;s CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-SRV
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 40
+ name SERVERS
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/4
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: DHCP-SRV, DNS-SRV, FILE-SRV ---
+interface range fastEthernet0/2 - 4
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.22 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief</pre></div>
+<div class="cfg"><div class="cfg-head">R1 — configs/r1.txt</div><pre>! ============================================================
+! R1 — Tshimo Agri Supplies HQ — edge router
+! Cisco 2911
+! Role: router-on-a-stick inter-VLAN routing on Gi0/0 (trunk to SW-CORE Gi0/1),
+!       DHCP relay to DHCP-SRV, WAN to ISP on Gi0/1, NAT/PAT overload.
+! Paste AFTER the five switch configs are in.
+! ============================================================
+
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+
+! --- Physical trunk interface: no IP, just bring it up ---
+interface gigabitEthernet0/0
+ description Trunk to SW-CORE Gi0/1
+ no ip address
+ no shutdown
+exit
+
+! --- One subinterface per VLAN = that VLAN&#x27;s default gateway ---
+interface gigabitEthernet0/0.10
+ description VLAN 10 ADMIN gateway
+ encapsulation dot1Q 10
+ ip address 10.23.0.1 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.20
+ description VLAN 20 SALES gateway
+ encapsulation dot1Q 20
+ ip address 10.23.0.65 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.30
+ description VLAN 30 WAREHOUSE gateway
+ encapsulation dot1Q 30
+ ip address 10.23.0.129 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.40
+ description VLAN 40 SERVERS gateway
+ encapsulation dot1Q 40
+ ip address 10.23.0.193 255.255.255.192
+ ip nat inside
+exit
+
+! Native VLAN 99: untagged frames on the trunk belong here
+interface gigabitEthernet0/0.99
+ description VLAN 99 MGMT-NATIVE gateway
+ encapsulation dot1Q 99 native
+ ip address 10.23.1.17 255.255.255.240
+exit
+
+! --- WAN to ISP ---
+interface gigabitEthernet0/1
+ description WAN to ISP
+ ip address 10.23.1.1 255.255.255.252
+ ip nat outside
+ no shutdown
+exit
+
+! --- Default route out to the ISP ---
+ip route 0.0.0.0 0.0.0.0 10.23.1.2
+
+! --- NAT/PAT: translate the business/server range (10.23.0.0/24) only.
+!     WAN and management (10.23.1.0/24) are deliberately excluded. ---
+access-list 1 permit 10.23.0.0 0.0.0.255
+ip nat inside source list 1 interface gigabitEthernet0/1 overload
+
+end
+write memory
+
+! Verify with:
+!   show ip interface brief        (all subinterfaces + Gi0/1 up/up)
+!   show ip route                  (C routes for each VLAN, S* default to 10.23.1.2)
+!   show ip nat translations       (after a PC pings 203.0.113.1)</pre></div>
+<div class="cfg"><div class="cfg-head">ISP — configs/isp.txt</div><pre>! ============================================================
+! ISP — simulated upstream provider
+! Cisco 2911
+! Role: far end of the R1 WAN /30, plus a loopback acting as an
+!       &quot;internet&quot; test target for NAT verification.
+!
+! ISP port facing R1 Gi0/1 is Gi0/0. Confirmed 2 Oct 2026: this file was
+! applied unchanged, R1 Gi0/1 came up/up, and a PC reached 203.0.113.1
+! through NAT — impossible unless the link lands on the addressed Gi0/0.
+! ============================================================
+
+enable
+configure terminal
+hostname ISP
+no ip domain-lookup
+
+interface gigabitEthernet0/0
+ description WAN to Tshimo R1 Gi0/1
+ ip address 10.23.1.2 255.255.255.252
+ no shutdown
+exit
+
+! Simulated internet host
+interface loopback0
+ description Internet test target
+ ip address 203.0.113.1 255.255.255.255
+exit
+
+end
+write memory
+
+! No route back to 10.23.0.0/24 is needed: R1 NATs every inside
+! host to 10.23.1.1, which the ISP already reaches directly.</pre></div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+MILESTONE 2 — CLIENT IMPLEMENTATION REVIEW
+Kurhula Success Maluleke | 48277444 | Project ID CMPG325-2026-042
+
+Client: Tshimo Agri Supplies (Potchefstroom, Agriculture)
+Assigned addressing block: 10.23.0.0/16
+Assigned networking challenge: Network Troubleshooting (fault isolation scenario) — Advanced
+
+GitHub portfolio:
+https://github.com/MALULEKE-KS/tshimo-agri-network
+
+The Milestone 1 design has been implemented in Cisco Packet Tracer 9.0.1 without changing any VLAN, subnet or gateway. The attached report documents everything that was built and tested, with every result backed by a screenshot from the running network.
+
+1. WORKING PACKET TRACER FILE
+Complete HQ network: ISP and R1 (Cisco 2911), SW-CORE plus four access switches (Cisco 2960-24TT), 40 PCs and 3 servers, 49 links. Saved in its final repaired, healthy state.
+
+2. ASSIGNED FEATURE — ADVANCED FAULT ISOLATION
+VLAN 30 (Warehouse) was removed from the allowed-VLAN list on the SW-CORE to SW-WH trunk. The demonstration covers a healthy baseline, symptoms (Warehouse loses its gateway and other VLANs while local switching still works; Admin control test unaffected), OSI layer-by-layer isolation down to the trunk's allowed list, root cause, a one-line fix, and verification. Section 7 of the report.
+
+3. TESTING EVIDENCE
+12 of 12 functional tests passed: topology and cabling, CDP port map, VLANs, 802.1Q trunks, R1 interfaces and routes, DHCP on every user VLAN via relay, same-VLAN and inter-VLAN pings, DNS and web, NAT to the simulated internet, and CR1 capacity. Sections 3–6 of the report.
+
+4. UPDATED GITHUB PORTFOLIO
+Per-device IOS configs, the Packet Tracer files, 20 evidence screenshots, the test log, the troubleshooting record and this report, committed in logical steps. Section 10 of the report.
+
+ATTACHMENTS
+- Milestone2_ClientImplementationReview_Maluleke_48277444.pdf (full implementation report with all testing evidence — attach this)
+- Milestone2_TshimoAgriHQ_Maluleke_48277444.pkt (working Packet Tracer file — attach this)

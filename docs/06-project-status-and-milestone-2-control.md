@@ -11,9 +11,9 @@ This document is the working control record for the transition from Milestone 1 
 
 ## 1. Current verdict
 
-**Status (2 Oct 2026): physical build complete (Gate B passed); device configuration not started; Milestone 2 submission not ready.**
+**Status (2 Oct 2026): Milestone 2 implemented, tested and packaged.**
 
-The unconfigured baseline topology is saved at `packet-tracer/tshimo-agri-hq-baseline.pkt`, with screenshots in `screenshots/`. All device configs are drafted in `configs/` but none has been applied in Packet Tracer yet. No testing or troubleshooting evidence exists yet.
+The configured network is saved at `packet-tracer/tshimo-agri-hq-milestone-2.pkt` (repaired, healthy state), with the unconfigured build kept at `packet-tracer/tshimo-agri-hq-baseline.pkt`. All 12 functional tests pass (`docs/10-test-results.md`), the assigned fault has been demonstrated end to end (`troubleshooting/advanced-fault-isolation.md`), and the submission package is in `submissions/milestone-2/`. Still to do: the actual eFundi upload (by Kurhula) and the Final submission work due 16 Oct 2026.
 
 ## 2. Confirmed project requirements
 
@@ -216,3 +216,5 @@ See `docs/08-milestone-2-execution-map.md` for the phase-by-phase responsibility
 | 2 Oct 2026 | Drafted `configs/r1.txt`, `configs/isp.txt`, and `configs/servers.md`. Not yet applied. |
 | 2 Oct 2026 | Gate B (physical build) passed. Clean topology screenshot retaken; port-label screenshot confirms ISP Gi0/0 ↔ R1 Gi0/1, R1 Gi0/0 to SW-CORE, SW-CORE Fa0/1–Fa0/4 to the access switches' Fa0/1, and server ports Fa0/2–Fa0/4. SW-CORE's Gi0/1 label and per-PC port order aren't legible at screenshot zoom; SW-CORE's end to be confirmed with `show cdp neighbors` in Phase C. Kurhula confirmed the root-level `.pka` file is not needed. |
 | 2 Oct 2026 | Recabled the 5 like-device links (ISP–R1, SW-CORE to each access switch) from straight-through to crossover, after a rubric check against "correct cabling". Baseline `.pkt` resaved; both screenshots retaken. Open: the ISP–R1 dash pattern and the ISP-side port (Gi0/0 vs Gi0/1) aren't legible in the screenshots; confirm both before Phase C. |
+| 2 Oct 2026 | Phase C–E completed in Packet Tracer: all five switch configs, R1 and ISP applied; servers and DHCP set up; 12/12 functional tests passed (`docs/10-test-results.md`); assigned fault injected, isolated, fixed and verified (`troubleshooting/advanced-fault-isolation.md`). ISP port resolved as Gi0/0 (NAT ping to the ISP loopback succeeded with `isp.txt` applied unchanged). During the fault demo `sw-wh.txt` was pasted onto SW-CORE by mistake; detected via CDP and trunk checks, corrected by re-applying `sw-core.txt`, and the fault demo re-run cleanly. Final repaired network saved as `packet-tracer/tshimo-agri-hq-milestone-2.pkt`. |
+| 2 Oct 2026 | Built the Milestone 2 submission package in `submissions/milestone-2/`: report (PDF + HTML source, with cropped evidence figures and all device configs as an appendix) and a frozen copy of the final `.pkt`. Lecturer's stated hand-in: full documentation with all testing evidence, plus the Packet Tracer file. |

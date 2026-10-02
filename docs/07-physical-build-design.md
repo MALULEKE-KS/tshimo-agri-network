@@ -72,7 +72,7 @@ Cable type follows the standard rule: **straight-through between unlike devices*
 
 | Cable ID | Endpoint A | Port A | Endpoint B | Port B | Cable type | Physical link | Later mode |
 |---|---|---|---|---|---|---|---|
-| C01 | ISP | Gi0/0 (confirm — may be Gi0/1 after recabling) | R1 | Gi0/1 | Crossover | WAN | Routed |
+| C01 | ISP | Gi0/0 | R1 | Gi0/1 | Crossover | WAN | Routed |
 | C02 | R1 | Gi0/0 | SW-CORE | Gi0/1 | Straight-through | Core uplink | 802.1Q trunk |
 | C03 | SW-CORE | Fa0/1 | SW-ADM | Fa0/1 | Crossover | Access uplink | 802.1Q trunk |
 | C04 | SW-CORE | Fa0/2 | SW-SAL | Fa0/1 | Crossover | Access uplink | 802.1Q trunk |
@@ -132,7 +132,7 @@ Do not begin IOS configuration until these physical checks pass:
 - [x] All 49 physical links in the cable schedule are present (6 uplinks; every one of the 43 endpoints has a link).
 - [x] Cable types match the schedule: C03–C06 are drawn dashed (crossover) in the screenshots; the other 44 links are solid (straight-through). *C01 (ISP–R1) was recabled as crossover, but the link is too short to see the dash pattern at screenshot zoom — confirm visually before Phase C.*
 - [x] R1 Gi0/0 is connected to SW-CORE Gi0/1. *R1 end reads Gi0/0; the SW-CORE end label overlaps the device name at screenshot zoom. Confirm with `show cdp neighbors` on SW-CORE during Phase C.*
-- [x] R1 Gi0/1 is connected to the ISP device. *ISP side read Gi0/0 before the recabling; the post-recabling screenshot appears to read Gi0/1. Confirm the ISP port before pasting `configs/isp.txt`.*
+- [x] R1 Gi0/1 is connected to ISP Gi0/0. *Confirmed in Phase C: `configs/isp.txt` addresses only Gi0/0, was applied unchanged, and a PC then reached the ISP loopback 203.0.113.1 through NAT, which requires the link to land on Gi0/0.*
 - [x] Access-switch uplinks use Fa0/1 exactly as documented; SW-CORE side reads Fa0/1–Fa0/4.
 - [x] Admin uses Fa0/2-Fa0/9. *Range endpoints Fa0/2, Fa0/3, Fa0/9 legible; per-PC order not legible at this zoom.*
 - [x] Sales uses Fa0/2-Fa0/13. *Fa0/2, Fa0/12, Fa0/13 legible; per-PC order not legible.*

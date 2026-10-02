@@ -4,10 +4,9 @@
 ! Role: far end of the R1 WAN /30, plus a loopback acting as an
 !       "internet" test target for NAT verification.
 !
-! CHECK BEFORE PASTING: the ISP port facing R1 was Gi0/0, but the link
-! was recabled on 2 Oct 2026 and may now be on Gi0/1. Hover over the
-! ISP–R1 link in Packet Tracer. If it's Gi0/1, change the interface
-! line below to gigabitEthernet0/1.
+! ISP port facing R1 Gi0/1 is Gi0/0. Confirmed 2 Oct 2026: this file was
+! applied unchanged, R1 Gi0/1 came up/up, and a PC reached 203.0.113.1
+! through NAT — impossible unless the link lands on the addressed Gi0/0.
 ! ============================================================
 
 enable
