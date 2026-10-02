@@ -1,0 +1,57 @@
+! ============================================================
+! SW-WH — Tshimo Agri Supplies HQ — Warehouse access switch
+! Cisco 2960-24TT
+! Role: 20 Warehouse PCs (12 existing + 8 CR1) on VLAN 30,
+!       trunked back to SW-CORE Fa0/3.
+! Paste this block into SW-WH's CLI after Gate B (physical build) passes.
+!
+! NOTE: SW-CORE's Fa0/3 is the trunk port used for the assigned
+! troubleshooting fault (VLAN 30 removed from its allowed list).
+! This file configures the healthy baseline only — the fault is
+! injected later, on SW-CORE, per troubleshooting/advanced-fault-isolation.md.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-WH
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 30
+ name WAREHOUSE
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/3
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: 20 Warehouse PCs (includes CR1 growth) ---
+interface range fastEthernet0/2 - 21
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.21 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief

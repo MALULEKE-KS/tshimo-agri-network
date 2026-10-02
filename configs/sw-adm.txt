@@ -1,0 +1,51 @@
+! ============================================================
+! SW-ADM — Tshimo Agri Supplies HQ — Admin access switch
+! Cisco 2960-24TT
+! Role: 8 Admin PCs on VLAN 10, trunked back to SW-CORE Fa0/1.
+! Paste this block into SW-ADM's CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-ADM
+no ip domain-lookup
+
+! --- VLANs used locally (full DB lives on SW-CORE) ---
+vlan 10
+ name ADMIN
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to SW-CORE (802.1Q trunk, native VLAN 99) ---
+interface fastEthernet0/1
+ description Uplink to SW-CORE Fa0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Access ports: 8 Admin PCs ---
+interface range fastEthernet0/2 - 9
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.19 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief

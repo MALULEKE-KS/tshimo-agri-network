@@ -1,0 +1,79 @@
+! ============================================================
+! SW-CORE — Tshimo Agri Supplies HQ — Layer 2 distribution switch
+! Cisco 2960-24TT
+! Role: trunks R1 (Gi0/1) down to the four access switches (Fa0/1-4).
+!       Holds the full VLAN database since every VLAN passes through here.
+! Paste this block into SW-CORE's CLI after Gate B (physical build) passes.
+! ============================================================
+
+enable
+configure terminal
+hostname SW-CORE
+no ip domain-lookup
+
+! --- VLAN database ---
+vlan 10
+ name ADMIN
+vlan 20
+ name SALES
+vlan 30
+ name WAREHOUSE
+vlan 40
+ name SERVERS
+vlan 99
+ name MGMT-NATIVE
+exit
+
+! --- Uplink to R1 (802.1Q trunk, native VLAN 99) ---
+interface gigabitEthernet0/1
+ description Uplink to R1 Gi0/0
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+! --- Trunks to the four access switches ---
+interface range fastEthernet0/1 - 4
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,99
+ no shutdown
+exit
+
+interface fastEthernet0/1
+ description Trunk to SW-ADM Fa0/1
+exit
+interface fastEthernet0/2
+ description Trunk to SW-SAL Fa0/1
+exit
+interface fastEthernet0/3
+ description Trunk to SW-WH Fa0/1
+exit
+interface fastEthernet0/4
+ description Trunk to SW-SRV Fa0/1
+exit
+
+! --- Management SVI on the native VLAN ---
+interface vlan 99
+ ip address 10.23.1.18 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 10.23.1.17
+
+end
+write memory
+
+! ------------------------------------------------------------
+! If Packet Tracer's 2960 rejects "switchport mode trunk" with an
+! encapsulation error, add this line before it on each trunk interface:
+!   switchport trunk encapsulation dot1q
+! (Not expected on a real 2960-24TT — it's 802.1Q-only — but PT model
+! behaviour can vary; report the exact error if you see one.)
+! ------------------------------------------------------------
+
+! Verify with:
+!   show vlan brief
+!   show interfaces trunk
+!   show ip interface brief

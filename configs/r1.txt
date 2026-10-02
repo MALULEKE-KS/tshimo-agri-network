@@ -1,0 +1,82 @@
+! ============================================================
+! R1 — Tshimo Agri Supplies HQ — edge router
+! Cisco 2911
+! Role: router-on-a-stick inter-VLAN routing on Gi0/0 (trunk to SW-CORE Gi0/1),
+!       DHCP relay to DHCP-SRV, WAN to ISP on Gi0/1, NAT/PAT overload.
+! Paste AFTER the five switch configs are in.
+! ============================================================
+
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+
+! --- Physical trunk interface: no IP, just bring it up ---
+interface gigabitEthernet0/0
+ description Trunk to SW-CORE Gi0/1
+ no ip address
+ no shutdown
+exit
+
+! --- One subinterface per VLAN = that VLAN's default gateway ---
+interface gigabitEthernet0/0.10
+ description VLAN 10 ADMIN gateway
+ encapsulation dot1Q 10
+ ip address 10.23.0.1 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.20
+ description VLAN 20 SALES gateway
+ encapsulation dot1Q 20
+ ip address 10.23.0.65 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.30
+ description VLAN 30 WAREHOUSE gateway
+ encapsulation dot1Q 30
+ ip address 10.23.0.129 255.255.255.192
+ ip helper-address 10.23.0.194
+ ip nat inside
+exit
+
+interface gigabitEthernet0/0.40
+ description VLAN 40 SERVERS gateway
+ encapsulation dot1Q 40
+ ip address 10.23.0.193 255.255.255.192
+ ip nat inside
+exit
+
+! Native VLAN 99: untagged frames on the trunk belong here
+interface gigabitEthernet0/0.99
+ description VLAN 99 MGMT-NATIVE gateway
+ encapsulation dot1Q 99 native
+ ip address 10.23.1.17 255.255.255.240
+exit
+
+! --- WAN to ISP ---
+interface gigabitEthernet0/1
+ description WAN to ISP
+ ip address 10.23.1.1 255.255.255.252
+ ip nat outside
+ no shutdown
+exit
+
+! --- Default route out to the ISP ---
+ip route 0.0.0.0 0.0.0.0 10.23.1.2
+
+! --- NAT/PAT: translate the business/server range (10.23.0.0/24) only.
+!     WAN and management (10.23.1.0/24) are deliberately excluded. ---
+access-list 1 permit 10.23.0.0 0.0.0.255
+ip nat inside source list 1 interface gigabitEthernet0/1 overload
+
+end
+write memory
+
+! Verify with:
+!   show ip interface brief        (all subinterfaces + Gi0/1 up/up)
+!   show ip route                  (C routes for each VLAN, S* default to 10.23.1.2)
+!   show ip nat translations       (after a PC pings 203.0.113.1)
