@@ -23,3 +23,11 @@ $RECYCLE.BIN/
 
 # Local assistant/session config — not part of the submitted project
 CLAUDE.md
+CLAUDE_CODE_HANDOFF.md
+CLAUDE_CODE_START_PROMPT.md
+
+# Lecturer course material (lecture decks, rubric originals) — kept locally only
+guidelines/
+
+# Packet Tracer activity files — the project deliverable is the .pkt
+*.pka
