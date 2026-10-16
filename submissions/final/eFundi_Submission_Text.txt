@@ -1,0 +1,32 @@
+FINAL SUBMISSION - TSHIMO AGRI SUPPLIES NETWORK
+Kurhula Success Maluleke | 48277444 | Project ID CMPG325-2026-042
+
+Client: Tshimo Agri Supplies (Potchefstroom, Agriculture)
+Assigned addressing block: 10.23.0.0/16
+Assigned networking challenge: Network Troubleshooting (fault isolation scenario) - Advanced
+
+The Milestone 1 design was built in Cisco Packet Tracer 9.0.1 in Milestone 2 without changing any VLAN, subnet or gateway. It is submitted here in its final, repaired state, together with the technical report and the video demonstration.
+
+1. PACKET TRACER PROJECT (.pkt)
+Complete HQ network: ISP and R1 (Cisco 2911), SW-CORE plus four access switches (Cisco 2960-24TT), 40 PCs and 3 servers, 49 links. VLANs 10/20/30/40/99, 802.1Q trunks with native VLAN 99, router-on-a-stick, DHCP with relay, DNS, HTTP/FTP, and NAT/PAT. Saved in the repaired, healthy state (the assigned fault is not present in the file).
+The .pkt file type is not on eFundi's list of accepted attachments, so the file is provided on GitHub:
+https://github.com/MALULEKE-KS/tshimo-agri-network/blob/master/packet-tracer/tshimo-agri-hq-milestone-2.pkt
+(Identical copy in the Final package: submissions/final/Final_TshimoAgriHQ_Maluleke_48277444.pkt)
+
+2. GITHUB PORTFOLIO OF EVIDENCE
+Design documents, per-device IOS configs, 20 evidence screenshots, the 12-test log, the troubleshooting record and three frozen submission packages (milestone-1, milestone-2, final).
+https://github.com/MALULEKE-KS/tshimo-agri-network
+
+3. TECHNICAL REPORT (attached as PDF)
+27 pages: client requirements and the assumptions made, design rationale (topology and addressing decisions, alternatives considered, the arithmetic), implementation, 12 of 12 functional tests, the assigned Advanced fault-isolation challenge (baseline, symptoms, layered isolation, root cause, fix, verification), Change Request 1 (implemented) and a proposed branch-office design (design only: not built or simulated), issues encountered, limitations and future work, reflection, and the full device configurations. The report builds on my own Milestone 1 and Milestone 2 submissions for this project; the overlap with those is deliberate and stated in the report.
+
+4. 15-20 MINUTE INSET VIDEO
+Walkthrough with webcam inset: the client and brief, design and addressing, a live tour of the Packet Tracer network, a live demonstration of the assigned fault (inject, symptoms, control test, layer-by-layer isolation, fix, verification), issues and lessons learned.
+Video link: [PASTE VIDEO LINK HERE]
+(Link access: [anyone with the link can view] - no sign-in needed.)
+
+5. ADDITIONAL FILES
+None beyond the above.
+
+ATTACHED TO THIS SUBMISSION
+- Final_TechnicalReport_Maluleke_48277444.pdf
