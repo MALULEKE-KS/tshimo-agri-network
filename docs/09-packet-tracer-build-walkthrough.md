@@ -1,5 +1,7 @@
 # 09 — Packet Tracer Build Walkthrough
 
+> **Historical build guide.** Written before the Packet Tracer build (Phase B). The build was completed on 2 Oct 2026; its checkboxes were left unticked as written. Where it differs from what was built, [`07-physical-build-design.md`](07-physical-build-design.md) and `configs/` are authoritative (for example, like-device links are crossover).
+
 **Purpose:** exact, click-by-click steps to place, name, and cable the HQ topology in Cisco Packet Tracer, following the approved physical design in [`07-physical-build-design.md`](07-physical-build-design.md) and the locked decisions in [`06-project-status-and-milestone-2-control.md`](06-project-status-and-milestone-2-control.md) §5.
 
 **Scope of this document:** physical placement, naming, and cabling only — no IOS commands yet. IOS configuration (VLANs, trunks, subinterfaces, DHCP) is Phase C and comes after this build is verified (Gate B in `07-physical-build-design.md` §7).

@@ -11,7 +11,9 @@ This document is the working control record for the transition from Milestone 1 
 
 ## 1. Current verdict
 
-**Status (2 Oct 2026): Milestone 2 implemented, tested and packaged.**
+**Status (15 Oct 2026): Milestones 1 and 2 are complete and submitted (reported by Kurhula; no eFundi receipt seen). The Final package is prepared in `submissions/final/`; the video is recorded and uploaded by Kurhula.**
+
+*Milestone 2 status as at 2 Oct 2026: implemented, tested and packaged.*
 
 The configured network is saved at `packet-tracer/tshimo-agri-hq-milestone-2.pkt` (repaired, healthy state), with the unconfigured build kept at `packet-tracer/tshimo-agri-hq-baseline.pkt`. All 12 functional tests pass (`docs/10-test-results.md`), the assigned fault has been demonstrated end to end (`troubleshooting/advanced-fault-isolation.md`), and the submission package is in `submissions/milestone-2/`. Still to do: the actual eFundi upload (by Kurhula) and the Final submission work due 16 Oct 2026.
 
@@ -100,7 +102,7 @@ Confirmed by Kurhula in session on 25 Sep 2026. These are approved for config-dr
 | ISP model and addressing | R1 WAN `10.23.1.1/30`; ISP WAN `10.23.1.2/30` (R1 default route next hop); ISP test target `203.0.113.1/32` | Kurhula | 25 Sep 2026 |
 | Troubleshooting fault | Remove VLAN 30 from the SW-CORE-to-SW-WH trunk allowed-VLAN list (SW-CORE Fa0/3) | Kurhula | 25 Sep 2026 |
 | Guideline set | More lecture notes may still be uploaded | Open | — |
-| Submission packaging | Milestone 2 folder does not exist yet | Create after testing | — |
+| Submission packaging | `submissions/milestone-2/` | Created after testing | 2 Oct 2026 |
 
 ### Approved implementation
 
@@ -113,6 +115,8 @@ Confirmed by Kurhula in session on 25 Sep 2026. These are approved for config-dr
 Not yet locked: exact eFundi M2 submission instructions, and whether a report/video is required at M2 in addition to the four diagram items (diagram indicates no).
 
 ## 6. Milestone 2 build checklist
+
+> **Historical plan checklist.** This is the original Milestone 2 plan, kept as written. Every item was carried out between 25 Sep and 2 Oct 2026; the evidence is in [`10-test-results.md`](10-test-results.md), `screenshots/`, `configs/` and the change log below. The boxes were deliberately not ticked retrospectively.
 
 - [ ] Confirm the unresolved decisions in Section 5.
 - [ ] Build all documented devices and links in Packet Tracer.
@@ -218,3 +222,9 @@ See `docs/08-milestone-2-execution-map.md` for the phase-by-phase responsibility
 | 2 Oct 2026 | Recabled the 5 like-device links (ISP–R1, SW-CORE to each access switch) from straight-through to crossover, after a rubric check against "correct cabling". Baseline `.pkt` resaved; both screenshots retaken. Open: the ISP–R1 dash pattern and the ISP-side port (Gi0/0 vs Gi0/1) aren't legible in the screenshots; confirm both before Phase C. |
 | 2 Oct 2026 | Phase C–E completed in Packet Tracer: all five switch configs, R1 and ISP applied; servers and DHCP set up; 12/12 functional tests passed (`docs/10-test-results.md`); assigned fault injected, isolated, fixed and verified (`troubleshooting/advanced-fault-isolation.md`). ISP port resolved as Gi0/0 (NAT ping to the ISP loopback succeeded with `isp.txt` applied unchanged). During the fault demo `sw-wh.txt` was pasted onto SW-CORE by mistake; detected via CDP and trunk checks, corrected by re-applying `sw-core.txt`, and the fault demo re-run cleanly. Final repaired network saved as `packet-tracer/tshimo-agri-hq-milestone-2.pkt`. |
 | 2 Oct 2026 | Built the Milestone 2 submission package in `submissions/milestone-2/`: report (PDF + HTML source, with cropped evidence figures and all device configs as an appendix) and a frozen copy of the final `.pkt`. Lecturer's stated hand-in: full documentation with all testing evidence, plus the Packet Tracer file. |
+| 15 Oct 2026 | Kurhula reported that Milestone 1 and Milestone 2 were both uploaded to eFundi and that the Milestone 2 declaration was signed. No receipts were seen, so this is self-reported. |
+| 15 Oct 2026 | Final stage started. Built the technical report (`submissions/final/Final_TechnicalReport_Maluleke_48277444.html/.pdf`, 27 pages, reusing the Milestone 2 figures) and copied the repaired `.pkt` into `submissions/final/` (byte-identical to the Milestone 2 file). Whether that `.pkt` opens and holds the repaired state is not verified by Claude; Kurhula to confirm with `show interfaces trunk` on SW-CORE. |
+| 15 Oct 2026 | Wrote `docs/11-branch-office-design-proposal.md`, labelled as a design proposal: not built, not simulated. Mirrors HQ shifted +128 in the third octet; needs R1 Gi0/2, one static route and one NAT ACL line at HQ. Proposal, not a decision: needs client confirmation. |
+| 15 Oct 2026 | Wrote `docs/12-final-video-script-and-defence-prep.md`: running order, live fault-demo steps, pre-recording checklist and question bank. Notes that R1's Warehouse subinterface was ruled out by inference in the recorded evidence and should be shown directly in the live demo. |
+| 15 Oct 2026 | Updated the README status table and document index. Added "historical" notes to the Milestone 2 plan checklists in `docs/06` §6, `docs/08` and `docs/09`. |
+| 16 Oct 2026 | Kurhula supplied the eFundi Final instructions: due 16 Oct 2026 23:55, 0 resubmissions, Turnitin applies, no late submissions. Required: .pkt, GitHub portfolio, technical report, 15-20 min inset video, any additional files. **Accepted attachment types do not include .pkt or video**, so those two are submitted as links (GitHub and an unlisted/shared video link) with the technical report PDF attached. Added a note to the report that it builds on the student's own M1/M2 submissions (Turnitin overlap). The brief still states no report template or format. |

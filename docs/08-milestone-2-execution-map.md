@@ -7,6 +7,8 @@
 **Map created:** 25 September 2026  
 **Milestone 2:** Client Implementation Review, due 2 October 2026
 
+> **Historical plan.** This was the Milestone 2 work plan (25 Sep 2026). All phases A–F were carried out by 2 Oct 2026; its checkboxes were deliberately left unticked as written. The evidence of what was actually done is in [`10-test-results.md`](10-test-results.md), `screenshots/`, `configs/` and the change log in [`06`](06-project-status-and-milestone-2-control.md).
+
 This is the source-linked work map for Milestone 2. It separates what the supplied milestone overview explicitly says to submit, what the project rubric assesses across the project, and what remains proposed or unknown. It is designed to keep implementation, testing, evidence, and submission aligned.
 
 ## 1. Source basis and limits

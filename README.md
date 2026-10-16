@@ -25,13 +25,14 @@ tshimo-agri-network/
 │   ├── 03-logical-topology.md
 │   ├── 04-ip-addressing-plan.md
 │   ├── 05-change-requests.md
+│   ├── 06–10                      control record, physical build, execution map, build walkthrough, test results
+│   ├── 11-branch-office-design-proposal.md
+│   ├── 12-final-video-script-and-defence-prep.md
 │   └── assets/                    topology diagrams, banners — referenced by docs/ and submissions/
 ├── submissions/                   frozen, graded deliverables — one folder per milestone
-│   └── milestone-1/
-│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.pdf    (the submission document)
-│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.html  (report source, for future edits)
-│       ├── Milestone1_ClientDesignReview_Maluleke_48277444.docx  (early draft, superseded by the PDF)
-│       └── eFundi_Submission_Text.txt                            (assignment text-box copy)
+│   ├── milestone-1/               design package (PDF, HTML, DOCX, eFundi text)
+│   ├── milestone-2/               implementation report (PDF, HTML), .pkt, figures, eFundi text
+│   └── final/                     technical report (PDF, HTML), final .pkt, figures, eFundi text
 ├── packet-tracer/                 the working .pkt file
 ├── configs/                       Cisco IOS configuration command sets, one file per device
 ├── screenshots/                   connectivity and configuration evidence
@@ -48,9 +49,11 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 
 | Milestone | Due | Status |
 |---|---|---|
-| Milestone 1 — Client Design Review | 28 Aug 2026 | Design package finalised, ready for eFundi submission |
-| Milestone 2 | 2 Oct 2026 | Implemented and tested — network configured in Packet Tracer, 12/12 tests passing, assigned fault demonstrated and repaired; package in [`submissions/milestone-2/`](submissions/milestone-2/) |
-| Final submission | 16 Oct 2026 | Not started |
+| Milestone 1 — Client Design Review | 28 Aug 2026 | Complete — package in [`submissions/milestone-1/`](submissions/milestone-1/) |
+| Milestone 2 — Client Implementation Review | 2 Oct 2026 | Complete — network configured in Packet Tracer, 12/12 tests passing, assigned fault demonstrated and repaired; package in [`submissions/milestone-2/`](submissions/milestone-2/) |
+| Final submission | 16 Oct 2026 | Package prepared in [`submissions/final/`](submissions/final/): technical report and final `.pkt`. The inset video is recorded and uploaded through eFundi (not stored in this repository). The branch-office design is a proposal only: it is not built or simulated |
+
+Milestones 1 and 2 and the Final are three separate frozen packages; later work never edits an earlier one.
 
 ## Documents
 
@@ -65,5 +68,8 @@ Single edge router (R1, router-on-a-stick with NAT/PAT to the ISP) → core swit
 - [08 — Milestone 2 Execution Map](docs/08-milestone-2-execution-map.md)
 - [09 — Packet Tracer Build Walkthrough](docs/09-packet-tracer-build-walkthrough.md)
 - [10 — Milestone 2 Test Results](docs/10-test-results.md)
+- [11 — Branch Office Design Proposal](docs/11-branch-office-design-proposal.md) — design only; not built or simulated
+- [12 — Final Video Script and Defence Prep](docs/12-final-video-script-and-defence-prep.md)
 - [Advanced Fault Isolation record](troubleshooting/advanced-fault-isolation.md)
 - **[Milestone 2 — Client Implementation Review (PDF)](submissions/milestone-2/Milestone2_ClientImplementationReview_Maluleke_48277444.pdf)** — the full implementation report with all testing and troubleshooting evidence. Submitted with [`tshimo-agri-hq-milestone-2.pkt`](packet-tracer/tshimo-agri-hq-milestone-2.pkt).
+- **[Final Submission — Technical Report (PDF)](submissions/final/Final_TechnicalReport_Maluleke_48277444.pdf)** — design rationale, implementation, testing, the assigned fault, growth (CR1 and the branch proposal), issues, limitations and reflection. Submitted with [`Final_TshimoAgriHQ_Maluleke_48277444.pkt`](submissions/final/Final_TshimoAgriHQ_Maluleke_48277444.pkt), which is the same repaired network as the Milestone 2 file.
