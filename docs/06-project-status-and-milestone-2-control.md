@@ -11,7 +11,9 @@ This document is the working control record for the transition from Milestone 1 
 
 ## 1. Current verdict
 
-**Status (15 Oct 2026): Milestones 1 and 2 are complete and submitted (reported by Kurhula; no eFundi receipt seen). The Final package is prepared in `submissions/final/`; the video is recorded and uploaded by Kurhula.**
+**Status (17 Oct 2026): PROJECT COMPLETE. Milestone 1, Milestone 2 and the Final Submission have all been submitted through eFundi (reported by Kurhula; no eFundi receipts are held in this repository). No further work is planned unless requested.**
+
+*Earlier status, 15 Oct 2026: Milestones 1 and 2 submitted; Final package prepared in `submissions/final/` with the video still to be recorded and uploaded.*
 
 *Milestone 2 status as at 2 Oct 2026: implemented, tested and packaged.*
 
@@ -228,3 +230,5 @@ See `docs/08-milestone-2-execution-map.md` for the phase-by-phase responsibility
 | 15 Oct 2026 | Wrote `docs/12-final-video-script-and-defence-prep.md`: running order, live fault-demo steps, pre-recording checklist and question bank. Notes that R1's Warehouse subinterface was ruled out by inference in the recorded evidence and should be shown directly in the live demo. |
 | 15 Oct 2026 | Updated the README status table and document index. Added "historical" notes to the Milestone 2 plan checklists in `docs/06` §6, `docs/08` and `docs/09`. |
 | 16 Oct 2026 | Kurhula supplied the eFundi Final instructions: due 16 Oct 2026 23:55, 0 resubmissions, Turnitin applies, no late submissions. Required: .pkt, GitHub portfolio, technical report, 15-20 min inset video, any additional files. **Accepted attachment types do not include .pkt or video**, so those two are submitted as links (GitHub and an unlisted/shared video link) with the technical report PDF attached. Added a note to the report that it builds on the student's own M1/M2 submissions (Turnitin overlap). The brief still states no report template or format. |
+| 17 Oct 2026 | Kurhula reported that everything for the Final Submission had been submitted in eFundi (technical report, `.pkt`, GitHub portfolio and the inset video). **Self-reported; no receipt seen.** Project closed. README rewritten as a finished record: completion banner, outcome table, rubric-to-evidence map, built-versus-proposed statement and instructions for opening the `.pkt` files. The Final package is tagged `final-submission` in git. |
+| 17 Oct 2026 | Known residual gaps, recorded rather than hidden: (1) the repository copy of `submissions/final/eFundi_Submission_Text.txt` still holds the placeholder `[PASTE VIDEO LINK HERE]`, because the real video link was added only in the eFundi text box; (2) whether the saved `.pkt` opens and holds the repaired state was never verified by Claude, which cannot open Packet Tracer files; (3) the video is hosted outside the repository and is not part of it; (4) the branch-office design (`docs/11`) is a proposal that was never built or simulated. |
